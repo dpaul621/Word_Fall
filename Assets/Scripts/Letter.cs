@@ -47,7 +47,7 @@ public class Letter : MonoBehaviour
     }
     private void Start()
     {
-        _rigidbody2D.velocity = new Vector2(0, letterSpawnScript.letterMovementSpeed);
+        _rigidbody2D.velocity = new Vector2(0, letterSpawnScript.currentLetterMovementSpeed);
         GameObject particleObject = GameObject.Find("Particles_Click");
         if (particleObject != null)
         {
@@ -109,7 +109,7 @@ public class Letter : MonoBehaviour
         if (hitBelow.collider == null && _rigidbody2D.bodyType == RigidbodyType2D.Static)
         {
             _rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
-            _rigidbody2D.velocity = new Vector2(0, letterSpawnScript.letterMovementSpeed);
+            _rigidbody2D.velocity = new Vector2(0, letterSpawnScript.currentLetterMovementSpeed);
         }
 
         if (hitAbove.collider == null && _rigidbody2D.bodyType == RigidbodyType2D.Static)

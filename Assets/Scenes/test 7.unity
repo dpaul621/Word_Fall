@@ -185,7 +185,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1358375069
-  m_SortingLayer: 2
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -5212,6 +5212,9 @@ MonoBehaviour:
   submitParticlesObject: {fileID: 0}
   outlineObject: {fileID: 0}
   flashDuration: 0.3
+  selected: 0
+  selectedEffect: {fileID: 0}
+  selectedEffectPrefab: {fileID: 0}
 --- !u!4 &424103688 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 155409436596728554, guid: 1e3407dd8d5fe4a929657120240f36c0, type: 3}
@@ -5673,6 +5676,9 @@ MonoBehaviour:
   submitParticlesObject: {fileID: 0}
   outlineObject: {fileID: 0}
   flashDuration: 0.3
+  selected: 0
+  selectedEffect: {fileID: 0}
+  selectedEffectPrefab: {fileID: 0}
 --- !u!4 &856500124 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1126570588326665636, guid: 1d8c7e5ef98a04213a40eda730e13cee, type: 3}
@@ -6002,6 +6008,9 @@ MonoBehaviour:
   submitParticlesObject: {fileID: 0}
   outlineObject: {fileID: 0}
   flashDuration: 0.3
+  selected: 0
+  selectedEffect: {fileID: 0}
+  selectedEffectPrefab: {fileID: 0}
 --- !u!4 &1179030861 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8348810477971464537, guid: 601bd08c0dd394509900feb59ddccc71, type: 3}
@@ -6035,6 +6044,9 @@ MonoBehaviour:
   submitParticlesObject: {fileID: 0}
   outlineObject: {fileID: 0}
   flashDuration: 0.3
+  selected: 0
+  selectedEffect: {fileID: 0}
+  selectedEffectPrefab: {fileID: 0}
 --- !u!1001 &1229415430
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6304,6 +6316,9 @@ MonoBehaviour:
   submitParticlesObject: {fileID: 0}
   outlineObject: {fileID: 0}
   flashDuration: 0.3
+  selected: 0
+  selectedEffect: {fileID: 0}
+  selectedEffectPrefab: {fileID: 0}
 --- !u!4 &1453341629 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7222933641752107947, guid: c8b8708515244494b92ad2bebd6044cd, type: 3}
@@ -6424,6 +6439,9 @@ MonoBehaviour:
   submitParticlesObject: {fileID: 0}
   outlineObject: {fileID: 0}
   flashDuration: 0.3
+  selected: 0
+  selectedEffect: {fileID: 0}
+  selectedEffectPrefab: {fileID: 0}
 --- !u!4 &1598911993 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2517259662779781733, guid: 97ee652ecfe1a46fb84447833b9e2f95, type: 3}
@@ -6815,6 +6833,9 @@ MonoBehaviour:
   submitParticlesObject: {fileID: 0}
   outlineObject: {fileID: 0}
   flashDuration: 0.3
+  selected: 0
+  selectedEffect: {fileID: 0}
+  selectedEffectPrefab: {fileID: 0}
 --- !u!4 &1900144939 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1565740735368461566, guid: e9bcfc08aad3f400da139c91abe90cfd, type: 3}
@@ -6925,6 +6946,9 @@ MonoBehaviour:
   submitParticlesObject: {fileID: 0}
   outlineObject: {fileID: 0}
   flashDuration: 0.3
+  selected: 0
+  selectedEffect: {fileID: 0}
+  selectedEffectPrefab: {fileID: 0}
 --- !u!4 &2085696003 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 403593408262629288, guid: 200e3d45df926455eb561ba273c2aa26, type: 3}
@@ -6958,6 +6982,66 @@ MonoBehaviour:
   submitParticlesObject: {fileID: 0}
   outlineObject: {fileID: 0}
   flashDuration: 0.3
+  selected: 0
+  selectedEffect: {fileID: 0}
+  selectedEffectPrefab: {fileID: 0}
+--- !u!1001 &2137610111
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3738778924679183798, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7917103071279747908, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
+      propertyPath: m_Name
+      value: bg2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 069cdc73ef67b49688638013ed7196dc, type: 3}
 --- !u!1001 &402331496198447878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9317,3 +9401,4 @@ SceneRoots:
   - {fileID: 99184622}
   - {fileID: 8640768034735814029}
   - {fileID: 6263604511839396471}
+  - {fileID: 2137610111}

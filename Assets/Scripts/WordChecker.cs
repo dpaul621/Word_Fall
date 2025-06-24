@@ -4,11 +4,30 @@ using System.Linq;
 
 public class WordChecker : MonoBehaviour
 {
+    public float numberOfLetters = 3; 
+    public float levelOfDifficulty = 1; 
     private static HashSet<string> validWords;
 
     void Awake()
     {
         LoadWordList();
+        if(levelOfDifficulty == 1)
+        {
+            numberOfLetters = 3; // Easy
+        }
+        else if(levelOfDifficulty == 2)
+        {
+            numberOfLetters = 4; // Medium
+        }
+        else if(levelOfDifficulty == 3)
+        {
+            numberOfLetters = 5; // Hard
+        }
+        else
+        {
+            Debug.LogWarning("Invalid level of difficulty. Defaulting to Easy.");
+            numberOfLetters = 3;
+        }
     }
 
     void LoadWordList()
@@ -22,7 +41,7 @@ public class WordChecker : MonoBehaviour
             foreach (string word in words)
             {
                 string clean = word.Trim().ToLower();
-                if (!string.IsNullOrEmpty(clean) && clean.Length >= 4 && clean.All(char.IsLetter))
+                if (!string.IsNullOrEmpty(clean) && clean.Length >= numberOfLetters && clean.All(char.IsLetter))
                     validWords.Add(clean);
             }
         }
