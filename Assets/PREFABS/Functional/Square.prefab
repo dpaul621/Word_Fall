@@ -145,9 +145,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endScenarioText: {fileID: 0}
-  rayDistance: 3.75
+  rayDistance: 5
   hasExitedCollider: 0
-  raycastOffsetX: 1.83
+  raycastOffsetX: 2.5
   raycastOffsetY: 0.16
 --- !u!50 &4988545567892721650
 Rigidbody2D:

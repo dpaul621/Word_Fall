@@ -1,16 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-
+using System.Collections;
 public class WordChecker : MonoBehaviour
 {
     public float numberOfLetters = 3; 
     public float levelOfDifficulty = 1; 
     private static HashSet<string> validWords;
+    public GameManager gameManagerScript;
 
     void Awake()
     {
-        LoadWordList();
+        gameManagerScript = FindObjectOfType<GameManager>();
+        if (gameManagerScript == null)
+        {
+            Debug.LogError("GameManager not found in the scene.");
+            return;
+        }
+        levelOfDifficulty = gameManagerScript.Difficulty;
+        StartCoroutine(LoadWordList());
         if(levelOfDifficulty == 1)
         {
             numberOfLetters = 3; // Easy
@@ -30,8 +38,9 @@ public class WordChecker : MonoBehaviour
         }
     }
 
-    void LoadWordList()
+    private IEnumerator LoadWordList()
     {
+        yield return new WaitForEndOfFrame(); 
         validWords = new HashSet<string>();
         TextAsset wordFile = Resources.Load<TextAsset>("my_scrabble_wordlist"); // no .txt
         if (wordFile != null)

@@ -19,6 +19,7 @@ public class LetterSpawnScript : MonoBehaviour
     float currentChanceOfAdditionalLetter;
     public float currentLetterMovementSpeed;
     private Coroutine _spawnRoutine;
+    private float? lastXValue = null; 
 
     void OnEnable()
     {
@@ -72,7 +73,7 @@ public class LetterSpawnScript : MonoBehaviour
         }
     }
 
-    void SpawnLetterFromWeightedList()
+    /*void SpawnLetterFromWeightedList()
     {
         LetterData selectedLetter = GetWeightedRandomLetter();
         float randomXValue = spawnXValues[Random.Range(0, spawnXValues.Count)];
@@ -86,7 +87,31 @@ public class LetterSpawnScript : MonoBehaviour
             LetterData secondLetter = GetWeightedRandomLetter();
             Instantiate(secondLetter.prefab, new Vector3(secondX, transform.position.y, 0), Quaternion.identity);
         }
-    }
+    }*/
+    void SpawnLetterFromWeightedList()
+    {
+        // Create a list of available X values, excluding the last used one
+        List<float> availableX = new List<float>(spawnXValues);
+        if (lastXValue.HasValue)
+            availableX.Remove(lastXValue.Value);
+
+        // Pick the first letter's X position
+        float randomXValue = availableX[Random.Range(0, availableX.Count)];
+        lastXValue = randomXValue; // Update last used X
+
+        LetterData selectedLetter = GetWeightedRandomLetter();
+        Instantiate(selectedLetter.prefab, new Vector3(randomXValue, transform.position.y, 0), Quaternion.identity);
+
+        // For the possible second letter, exclude the first X value
+        if (Random.Range(0f, 1f) < currentChanceOfAdditionalLetter)
+        {
+            List<float> secondAvailableX = new List<float>(spawnXValues);
+            secondAvailableX.Remove(randomXValue);
+            float secondX = secondAvailableX[Random.Range(0, secondAvailableX.Count)];
+            LetterData secondLetter = GetWeightedRandomLetter();
+            Instantiate(secondLetter.prefab, new Vector3(secondX, transform.position.y, 0), Quaternion.identity);
+        }
+    }   
 
     LetterData GetWeightedRandomLetter()
     {

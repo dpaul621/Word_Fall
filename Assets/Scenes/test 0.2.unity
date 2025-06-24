@@ -4066,33 +4066,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2334289949959540917, guid: 5ddaf514bb616431ebf78b921bc8f411, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4988545567892721650, guid: 5ddaf514bb616431ebf78b921bc8f411, type: 3}
-      propertyPath: m_BodyType
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6237203092341134819, guid: 5ddaf514bb616431ebf78b921bc8f411, type: 3}
       propertyPath: m_Name
       value: EndScenario
-      objectReference: {fileID: 0}
-    - target: {fileID: 6237203092341134819, guid: 5ddaf514bb616431ebf78b921bc8f411, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7677962096513964516, guid: 5ddaf514bb616431ebf78b921bc8f411, type: 3}
-      propertyPath: rayDistance
-      value: 3.75
-      objectReference: {fileID: 0}
-    - target: {fileID: 7677962096513964516, guid: 5ddaf514bb616431ebf78b921bc8f411, type: 3}
-      propertyPath: raycastOffsetX
-      value: 1.83
-      objectReference: {fileID: 0}
-    - target: {fileID: 7677962096513964516, guid: 5ddaf514bb616431ebf78b921bc8f411, type: 3}
-      propertyPath: raycastOffsetY
-      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 7677962096513964516, guid: 5ddaf514bb616431ebf78b921bc8f411, type: 3}
       propertyPath: endScenarioText

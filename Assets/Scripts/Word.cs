@@ -13,6 +13,7 @@ public class Word : MonoBehaviour
     public Image levelTrackerImage;
     public WordFade wordFadeScript;
     public float fillSpeed = 2f;
+    public GameObject VictoryImage;
     void Update()
     {
         LetersClearedTracker();
@@ -153,7 +154,18 @@ public class Word : MonoBehaviour
 
     IEnumerator LoadNextScene()
     {
-        yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (SceneManager.GetActiveScene().buildIndex < 10)
+        {
+            yield return new WaitForSeconds(1f);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        }
+        if (SceneManager.GetActiveScene().buildIndex == 10)
+        {
+            VictoryImage.SetActive(true);
+            //display image saying "You have completed the game, please wait for the next update"
+            Debug.Log("You have completed the game, please wait for the next update");
+            yield return new WaitForSeconds(5f);
+            SceneManager.LoadScene(0); 
+        }
     }
 }
