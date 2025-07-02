@@ -9,6 +9,9 @@ TagManager:
   - BottomGrid
   - LetterOnGrid
   - FloatingLetter
+  - Explosion
+  - ElectricEffect
+  - PauseButton
   layers:
   - Default
   - TransparentFX

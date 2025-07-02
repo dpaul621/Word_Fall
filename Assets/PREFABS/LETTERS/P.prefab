@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4153256670322088138}
   - component: {fileID: 4744448637229613744}
   - component: {fileID: -7678351483554804311}
+  - component: {fileID: -8421454469914615036}
   m_Layer: 0
   m_Name: P
   m_TagString: FloatingLetter
@@ -140,6 +141,13 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 7502856543031428952, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
+  ElectricEffectPrefab: {fileID: 3911578771835633419, guid: 230a3c0b5f85c4705a485e5419f62667, type: 3}
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 5452341686290999062, guid: ad696f686be28450b97f5351bc755f24, type: 3}
+  bombParticleEffects: {fileID: 7703787091275761631, guid: c1ab984b4022f4d5b9ccd8655168391a, type: 3}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!61 &-7678351483554804311
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -185,3 +193,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
+--- !u!95 &-8421454469914615036
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4981455544076649526}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

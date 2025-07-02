@@ -2631,6 +2631,63 @@ Transform:
   - {fileID: 1996132167}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1980195671
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.35013378
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848570081391670885, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_Name
+      value: ElectricManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
 --- !u!1001 &1996132166
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3079,6 +3136,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 2960304607123142580, guid: f5ffe47d5255c4b1592e96d1dfa7b387, type: 3}
+      propertyPath: chancesOfElectic
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2960304607123142580, guid: f5ffe47d5255c4b1592e96d1dfa7b387, type: 3}
       propertyPath: letterMovementSpeed
       value: -0.215
       objectReference: {fileID: 0}
@@ -3418,3 +3479,4 @@ SceneRoots:
   - {fileID: 1691770806}
   - {fileID: 1332307641}
   - {fileID: 1944148801}
+  - {fileID: 1980195671}

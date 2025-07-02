@@ -827,6 +827,15 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 0}
+  ElectricEffectPrefab: {fileID: 0}
+  ElectricAnimator: {fileID: 0}
+  chanceOfElectricEffect: 0.5
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 0}
+  bombParticleEffects: {fileID: 0}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!4 &424103688 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 155409436596728554, guid: 1e3407dd8d5fe4a929657120240f36c0, type: 3}
@@ -1186,6 +1195,15 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 0}
+  ElectricEffectPrefab: {fileID: 0}
+  ElectricAnimator: {fileID: 0}
+  chanceOfElectricEffect: 0.5
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 0}
+  bombParticleEffects: {fileID: 0}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!1001 &851293551
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1506,6 +1524,15 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 0}
+  ElectricEffectPrefab: {fileID: 0}
+  ElectricAnimator: {fileID: 0}
+  chanceOfElectricEffect: 0.5
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 0}
+  bombParticleEffects: {fileID: 0}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!4 &1006611734 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7331748975096999784, guid: 0d77192e71aea4ce6847c2f2c351645c, type: 3}
@@ -1640,6 +1667,15 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 0}
+  ElectricEffectPrefab: {fileID: 0}
+  ElectricAnimator: {fileID: 0}
+  chanceOfElectricEffect: 0.5
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 0}
+  bombParticleEffects: {fileID: 0}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!1001 &1229415430
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2024,6 +2060,15 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 0}
+  ElectricEffectPrefab: {fileID: 0}
+  ElectricAnimator: {fileID: 0}
+  chanceOfElectricEffect: 0.5
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 0}
+  bombParticleEffects: {fileID: 0}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!4 &1443590323 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1565740735368461566, guid: e9bcfc08aad3f400da139c91abe90cfd, type: 3}
@@ -2106,6 +2151,63 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 993494045}
   m_SourcePrefab: {fileID: 100100000, guid: 601bd08c0dd394509900feb59ddccc71, type: 3}
+--- !u!1001 &1478458280
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.35013378
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426431626886366447, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848570081391670885, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
+      propertyPath: m_Name
+      value: ElectricManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4aa771af12445404fb5721d3c8a56e92, type: 3}
 --- !u!4 &1501250417 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7552198829486597066, guid: ded3a683e1c4e4c1f8a15cc56a29f77d, type: 3}
@@ -2162,6 +2264,15 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 0}
+  ElectricEffectPrefab: {fileID: 0}
+  ElectricAnimator: {fileID: 0}
+  chanceOfElectricEffect: 0.5
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 0}
+  bombParticleEffects: {fileID: 0}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!4 &1598911993 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2517259662779781733, guid: 97ee652ecfe1a46fb84447833b9e2f95, type: 3}
@@ -2615,6 +2726,15 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 0}
+  ElectricEffectPrefab: {fileID: 0}
+  ElectricAnimator: {fileID: 0}
+  chanceOfElectricEffect: 0.5
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 0}
+  bombParticleEffects: {fileID: 0}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!1001 &1898179034
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2869,6 +2989,15 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 0}
+  ElectricEffectPrefab: {fileID: 0}
+  ElectricAnimator: {fileID: 0}
+  chanceOfElectricEffect: 0.5
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 0}
+  bombParticleEffects: {fileID: 0}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!4 &2085696003 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 403593408262629288, guid: 200e3d45df926455eb561ba273c2aa26, type: 3}
@@ -2905,6 +3034,15 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 0}
+  ElectricEffectPrefab: {fileID: 0}
+  ElectricAnimator: {fileID: 0}
+  chanceOfElectricEffect: 0.5
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 0}
+  bombParticleEffects: {fileID: 0}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!1001 &402331496198447878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3879,6 +4017,10 @@ PrefabInstance:
     - target: {fileID: 2960304607123142580, guid: f5ffe47d5255c4b1592e96d1dfa7b387, type: 3}
       propertyPath: earlyGameTimer
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2960304607123142580, guid: f5ffe47d5255c4b1592e96d1dfa7b387, type: 3}
+      propertyPath: chancesOfElectic
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2960304607123142580, guid: f5ffe47d5255c4b1592e96d1dfa7b387, type: 3}
       propertyPath: letterMovementSpeed
@@ -5143,3 +5285,4 @@ SceneRoots:
   - {fileID: 153838071}
   - {fileID: 1318056788}
   - {fileID: 1691770806}
+  - {fileID: 1478458280}

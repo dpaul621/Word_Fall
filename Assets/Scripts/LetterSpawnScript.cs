@@ -19,7 +19,11 @@ public class LetterSpawnScript : MonoBehaviour
     float currentChanceOfAdditionalLetter;
     public float currentLetterMovementSpeed;
     private Coroutine _spawnRoutine;
-    private float? lastXValue = null; 
+    private float? lastXValue = null;
+    public float chancesOfABomb = 0.1f;
+    public float chancesOfElectic = 0.0f;
+    Letter letterScript;
+    public float level;
 
     void OnEnable()
     {
@@ -33,14 +37,42 @@ public class LetterSpawnScript : MonoBehaviour
     }
     void Awake()
     {
-            currentLowRangeSpawnInterval = earlyLowRangeSpawnInterval;
-            currentHighRangeSpawnInterval = earlyHighRangeSpawnInterval;
-            currentChanceOfAdditionalLetter = earlyChanceOfAdditionalLetter;
-            currentLetterMovementSpeed = earlyLetterMovementSpeed;
+        currentLowRangeSpawnInterval = earlyLowRangeSpawnInterval;
+        currentHighRangeSpawnInterval = earlyHighRangeSpawnInterval;
+        currentChanceOfAdditionalLetter = earlyChanceOfAdditionalLetter;
+        currentLetterMovementSpeed = earlyLetterMovementSpeed;
+    }
+
+    void LevelSetter()
+    {
+        earlyGameTimer = 12f + (level * 2f); 
+        lowRangeSpawnInterval = 3f - (level * 0.1f);
+        highRangeSpawnInterval = 4f - (level * 0.1f);
+        chanceOfAdditionalLetter = 0.01f + (level * 0.005f);
+        letterMovementSpeed = -0.175f - (level * 0.01f);
+        earlyLowRangeSpawnInterval = 1f;
+        earlyHighRangeSpawnInterval = 2f;
+        earlyChanceOfAdditionalLetter = 0.11f;
+        earlyLetterMovementSpeed = -0.35f;
+    }
+
+    void Start()
+    {
+        level = GameManager.Instance.GMLevel;
+        LevelSetter();
+        if(level >= 1 && level <= 10)
+        {
+            chancesOfABomb = 0f;
+        }
+        //if level is between 1 and 20, chances of electric is 0.0f
+        if(level >= 1 && level <= 20)
+        {
+            chancesOfElectic = 0f;
+        }
     }
     void FixedUpdate()
     {
-        //for the first 12 seconds of the game, low ran hight change chance of additional and movement speed wil be different values
+        //for the first 12 seconds of the game, low range spawn interval, high range spawn interval, chance of additional letter and movement speed will be different values
         if (Time.time < earlyGameTimer)
         {
             currentLowRangeSpawnInterval = earlyLowRangeSpawnInterval;
@@ -72,22 +104,6 @@ public class LetterSpawnScript : MonoBehaviour
             yield return new WaitForSeconds(randomSpawnInterval);
         }
     }
-
-    /*void SpawnLetterFromWeightedList()
-    {
-        LetterData selectedLetter = GetWeightedRandomLetter();
-        float randomXValue = spawnXValues[Random.Range(0, spawnXValues.Count)];
-        Instantiate(selectedLetter.prefab, new Vector3(randomXValue, transform.position.y, 0), Quaternion.identity);
-
-        if (Random.Range(0f, 1f) < currentChanceOfAdditionalLetter)
-        {
-            List<float> availableX = new List<float>(spawnXValues);
-            availableX.Remove(randomXValue);
-            float secondX = availableX[Random.Range(0, availableX.Count)];
-            LetterData secondLetter = GetWeightedRandomLetter();
-            Instantiate(secondLetter.prefab, new Vector3(secondX, transform.position.y, 0), Quaternion.identity);
-        }
-    }*/
     void SpawnLetterFromWeightedList()
     {
         // Create a list of available X values, excluding the last used one
@@ -101,16 +117,21 @@ public class LetterSpawnScript : MonoBehaviour
 
         LetterData selectedLetter = GetWeightedRandomLetter();
         Instantiate(selectedLetter.prefab, new Vector3(randomXValue, transform.position.y, 0), Quaternion.identity);
-
-        // For the possible second letter, exclude the first X value
-        if (Random.Range(0f, 1f) < currentChanceOfAdditionalLetter)
+        //access the selected letter's letter script, make the selected letters 'letterisabomb' script = true 50% of the time
+        selectedLetter.prefab.GetComponent<Letter>().letterIsBomb = Random.Range(0f, 1f) < chancesOfABomb;
+        if (selectedLetter.prefab.GetComponent<Letter>().letterIsBomb == false)
         {
-            List<float> secondAvailableX = new List<float>(spawnXValues);
-            secondAvailableX.Remove(randomXValue);
-            float secondX = secondAvailableX[Random.Range(0, secondAvailableX.Count)];
-            LetterData secondLetter = GetWeightedRandomLetter();
-            Instantiate(secondLetter.prefab, new Vector3(secondX, transform.position.y, 0), Quaternion.identity);
+            selectedLetter.prefab.GetComponent<Letter>().isElectric = Random.Range(0f, 1f) < chancesOfElectic;
         }
+        // For the possible second letter, exclude the first X value
+            if (Random.Range(0f, 1f) < currentChanceOfAdditionalLetter)
+            {
+                List<float> secondAvailableX = new List<float>(spawnXValues);
+                secondAvailableX.Remove(randomXValue);
+                float secondX = secondAvailableX[Random.Range(0, secondAvailableX.Count)];
+                LetterData secondLetter = GetWeightedRandomLetter();
+                Instantiate(secondLetter.prefab, new Vector3(secondX, transform.position.y, 0), Quaternion.identity);
+            }
     }   
 
     LetterData GetWeightedRandomLetter()

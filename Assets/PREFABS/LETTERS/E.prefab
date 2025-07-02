@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1715095731646859334}
   - component: {fileID: 4065022118313501015}
   - component: {fileID: -3373030956450694473}
+  - component: {fileID: 7011881845853147214}
   m_Layer: 0
   m_Name: E
   m_TagString: FloatingLetter
@@ -32,8 +33,7 @@ Transform:
   m_LocalPosition: {x: -4.84, y: 3.33, z: 0.08488555}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6357492368864151631}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1792770847619764857
@@ -141,6 +141,13 @@ MonoBehaviour:
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 7502856543031428952, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
+  ElectricEffectPrefab: {fileID: 3911578771835633419, guid: 230a3c0b5f85c4705a485e5419f62667, type: 3}
+  isElectric: 0
+  letterIsBomb: 0
+  BombPrefab: {fileID: 5452341686290999062, guid: ad696f686be28450b97f5351bc755f24, type: 3}
+  bombParticleEffects: {fileID: 7703787091275761631, guid: c1ab984b4022f4d5b9ccd8655168391a, type: 3}
+  animator: {fileID: 0}
+  bombDelay: 0.15
 --- !u!61 &-3373030956450694473
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -186,65 +193,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
---- !u!1001 &7082098934827432515
-PrefabInstance:
+--- !u!95 &7011881845853147214
+Animator:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 4326120673460834067}
-    m_Modifications:
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7502856543031428952, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-      propertyPath: m_Name
-      value: Letter Effect
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
---- !u!4 &6357492368864151631 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4211695598973760012, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
-  m_PrefabInstance: {fileID: 7082098934827432515}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052847893507005957}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

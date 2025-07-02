@@ -14,10 +14,13 @@ public class WordChecker : MonoBehaviour
         gameManagerScript = FindObjectOfType<GameManager>();
         if (gameManagerScript == null)
         {
+            numberOfLetters = 3;
             Debug.LogError("GameManager not found in the scene.");
-            return;
         }
-        levelOfDifficulty = gameManagerScript.Difficulty;
+        else
+        {
+            levelOfDifficulty = gameManagerScript.Difficulty;
+        }
         StartCoroutine(LoadWordList());
         if(levelOfDifficulty == 1)
         {

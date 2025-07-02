@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class Letter : MonoBehaviour
 {
@@ -21,6 +22,17 @@ public class Letter : MonoBehaviour
     public bool selected = false;
     public GameObject selectedEffect;
     public GameObject selectedEffectPrefab;
+    GameObject ElectricEffect;
+    public GameObject ElectricEffectPrefab;
+    public Animator ElectricAnimator;
+    public float chanceOfElectricEffect = 0.0f; 
+    public bool isElectric = false;
+    public bool letterIsBomb = false;
+    public GameObject BombPrefab;
+    public GameObject bombParticleEffects;
+    public Animator animator;
+    public float bombDelay = 0.15f;
+    public Pause pauseScript;
     private void Awake()
     {
         GameObject inputObj = GameObject.FindGameObjectWithTag("TextInputField");
@@ -44,9 +56,11 @@ public class Letter : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
 
         letterSpawnScript = FindObjectOfType<LetterSpawnScript>();
+
     }
     private void Start()
     {
+        pauseScript = GameObject.FindGameObjectWithTag("PauseButton").GetComponent<Pause>();
         _rigidbody2D.velocity = new Vector2(0, letterSpawnScript.currentLetterMovementSpeed);
         GameObject particleObject = GameObject.Find("Particles_Click");
         if (particleObject != null)
@@ -54,6 +68,41 @@ public class Letter : MonoBehaviour
             clickParticles = particleObject.GetComponent<ParticleSystem>();
         }
         Instantiate(selectedEffectPrefab, transform.position, Quaternion.identity, transform);
+        animator = GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogError("Animator component not found on the letter object.");
+        }
+        char firstLetter = gameObject.name[0];
+        animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>($"Animations/{firstLetter}");
+        if (letterIsBomb == true)
+        {
+            StartCoroutine(WaitAndSetSizzling());
+        }
+        else
+        {
+            if (isElectric)
+            {
+                ElectricEffect = Instantiate(ElectricEffectPrefab, transform.position, Quaternion.identity, transform);
+                ElectricAnimator = ElectricEffect.GetComponent<Animator>();
+            }
+        }
+    }
+
+    public void TriggerElectricEffect()
+    {
+        if (ElectricAnimator != null)
+        {
+            ElectricAnimator.SetTrigger("ElectricExplosion");
+            Destroy(selectedEffect);
+        }
+    }
+    //wait a frame then set bool to isSizzling
+    IEnumerator WaitAndSetSizzling()
+    {
+        Debug.Log("Waiting for end of frame to set isSizzling to true for: " + gameObject.name);
+        yield return new WaitForEndOfFrame(); 
+        animator.SetBool("isSizzling", true);
     }
     public void SubmitParticlesFunction()
     {
@@ -70,7 +119,10 @@ public class Letter : MonoBehaviour
     private void Update()
     {
         CheckIfLetterAboveAndBelow();
-        TouchUpdate();
+        if (pauseScript.isPaused == false)
+        {
+            TouchUpdate();
+        }
         SelectedeffectActivator();
     }
     void CheckIfLetterAboveAndBelow()
@@ -120,14 +172,14 @@ public class Letter : MonoBehaviour
     }
     private void TouchUpdate()
     {
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         // Only check mouse input in the editor
         if (Input.GetMouseButtonDown(0))
         {
             HandleTouchInput(Input.mousePosition);
             return;
         }
-    #else
+#else
         // Only check touch input on device
         if (Input.touchCount > 0)
         {
@@ -137,25 +189,25 @@ public class Letter : MonoBehaviour
                 HandleTouchInput(touch.position);
             }
         }
-    #endif
+#endif
     }
     private void HandleTouchInput(Vector2 screenPosition)
     {
         // Convert screen position to world position
         Camera camera = Camera.main;
         if (camera == null) return;
-        
+
         Vector3 worldPosition = camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, camera.nearClipPlane));
-        
+
         // For 2D games, use this raycast
         RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero);
-        
+
         // Check if this specific object was hit
         if (hit.collider != null && hit.collider.gameObject == gameObject)
         {
             GameObject hitObject = hit.collider.gameObject;
             LetterSelected(hitObject);
-        }        
+        }
     }
 
     void SelectedeffectActivator()
@@ -185,11 +237,8 @@ public class Letter : MonoBehaviour
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             if (spriteRenderer != null)
             {
-                Debug.Log("changed to red or the bool ");
+                Debug.Log("Letter selected: " + gameObject.name);
                 selected = true;
-                //spriteRenderer.color = Color.red;
-                //on select, active te the selected effect
-
             }
             char firstLetter = gameObject.name[0];
             if (!wordScript.letterObjects.Contains(gameObject))
@@ -275,4 +324,51 @@ public class Letter : MonoBehaviour
         }
         Destroy(flash, 0.44f);
     }
+
+    //on collision with anything tagged "explosion", destroy this object
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //make a other.tag match
+        if (other.gameObject.CompareTag("Explosion"))
+        {
+            if (isElectric)
+            {
+                Destroy(ElectricEffect);
+            }
+            animator.SetTrigger("smallDeath");
+            selectedEffect = transform.Find("Letter Effect(Clone)")?.gameObject;
+            if (selectedEffect != null)
+            {
+                Destroy(selectedEffect);
+            }
+        }
+    }
+    public void TriggerBomb()
+    {
+        if (BombPrefab != null)
+        {
+            StartCoroutine(BombAfterASecond());
+            if (animator != null)
+            {
+                animator.SetTrigger("Explosion");
+            }
+            selectedEffect = transform.Find("Letter Effect(Clone)")?.gameObject;
+            if (selectedEffect != null)
+            {
+                Destroy(selectedEffect);
+            }
+        }
+    }
+    //instantiate bomb after a fraction of a second
+    IEnumerator BombAfterASecond()
+    {
+        yield return new WaitForSeconds(bombDelay);
+        GameObject bomb = Instantiate(BombPrefab, transform.position, Quaternion.identity, transform);
+        Destroy(bomb, 0.1f);
+    }
+    public void DestroyMe()
+    {
+        // Destroy the letter object
+        Destroy(gameObject);
+    }   
 }

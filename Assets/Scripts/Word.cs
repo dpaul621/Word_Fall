@@ -14,6 +14,20 @@ public class Word : MonoBehaviour
     public WordFade wordFadeScript;
     public float fillSpeed = 2f;
     public GameObject VictoryImage;
+
+    void Start()
+    {
+        //access game manager script level
+        if (GameManager.Instance != null)
+        {
+            amountOfLettersToAdvance = 20 + (GameManager.Instance.GMLevel * 5f); // Adjust this formula as needed
+        }
+        else
+        {
+            Debug.LogWarning("GameManager instance not found. Using default amount of letters to advance.");
+            amountOfLettersToAdvance = 100f; // Default value if GameManager is not found
+        }  
+    } 
     void Update()
     {
         LetersClearedTracker();
@@ -92,9 +106,31 @@ public class Word : MonoBehaviour
         {
             if (letter != null)
             {
-                letter.GetComponent<Letter>().SubmitParticlesFunction();
                 lettersCLearedByWord++;
-                Destroy(letter);
+                Letter letterScript = letter.GetComponent<Letter>();
+                if (letterScript.letterIsBomb)
+                {
+                    Debug.Log("Bomb triggered!");
+                    letterScript.TriggerBomb();
+                }
+                else if (letterScript.isElectric)
+                {
+                    Debug.Log("Electric effect triggered!");
+                    letterScript.TriggerElectricEffect();
+                }
+                else if (letterScript.selected)
+                {
+                    Debug.Log("Letter cleared: " + letter.name);
+                    letterScript.animator.SetTrigger("smallDeath");
+                    Destroy(letterScript.selectedEffect);
+                    letterScript.selected = false;
+                }
+                else
+                {
+                    Debug.Log("Letter cleared: " + letter.name);
+                    letterScript.animator.SetTrigger("smallDeath");
+                    Destroy(letterScript.selectedEffect);
+                }
                 if (index == count - 1)
                 {
                     if (lettersCLearedByWord == 3)
@@ -132,7 +168,19 @@ public class Word : MonoBehaviour
     {
         if (lettersCleared >= amountOfLettersToAdvance)
         {
-            StartCoroutine(LoadNextScene());
+            //access game manager script and increase the level by 1
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.GMLevel++;
+                Debug.Log("Level increased to: " + GameManager.Instance.GMLevel);
+                //reload this SceneManagement
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            else
+            {
+                Debug.LogWarning("GameManager instance not found. Cannot increase level.");
+            }
+            lettersCleared = 0;
         }
         float targetFill = lettersCleared / amountOfLettersToAdvance;
         StartCoroutine(AnimateFill(targetFill));
