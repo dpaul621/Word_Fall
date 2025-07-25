@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 035eb65ca723449db837ac040f08f26d, type: 3}
   m_Name: I
   m_EditorClassIdentifier: 
-  character: 49
+  character: 73
   frequency: 7
   prefab: {fileID: 941378589495409119, guid: c8b8708515244494b92ad2bebd6044cd, type: 3}
+  isVowel: 1

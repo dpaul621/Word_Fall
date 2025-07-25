@@ -52,11 +52,26 @@ TagManager:
   - name: bg
     uniqueID: 2241267559
     locked: 0
+  - name: bgoj
+    uniqueID: 4068640427
+    locked: 0
+  - name: sun
+    uniqueID: 3828645619
+    locked: 0
+  - name: Foreground
+    uniqueID: 1027825997
+    locked: 0
+  - name: box
+    uniqueID: 2654220433
+    locked: 0
   - name: effects behind letters
     uniqueID: 3073833371
     locked: 0
   - name: LETTERS
     uniqueID: 4171673833
+    locked: 0
+  - name: Character
+    uniqueID: 1918959131
     locked: 0
   - name: Effects
     uniqueID: 1358375069

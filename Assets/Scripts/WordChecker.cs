@@ -22,15 +22,15 @@ public class WordChecker : MonoBehaviour
             levelOfDifficulty = gameManagerScript.Difficulty;
         }
         StartCoroutine(LoadWordList());
-        if(levelOfDifficulty == 1)
+        if(GameManager.Instance.Difficulty == 1)
         {
             numberOfLetters = 3; // Easy
         }
-        else if(levelOfDifficulty == 2)
+        else if(GameManager.Instance.Difficulty == 2)
         {
             numberOfLetters = 4; // Medium
         }
-        else if(levelOfDifficulty == 3)
+        else if(GameManager.Instance.Difficulty == 3)
         {
             numberOfLetters = 5; // Hard
         }
@@ -45,10 +45,10 @@ public class WordChecker : MonoBehaviour
     {
         yield return new WaitForEndOfFrame(); 
         validWords = new HashSet<string>();
-        TextAsset wordFile = Resources.Load<TextAsset>("my_scrabble_wordlist"); // no .txt
+        TextAsset wordFile = Resources.Load<TextAsset>("my_scrabble_wordlist"); 
         if (wordFile != null)
         {
-            Debug.Log("Word list loaded successfully.");
+            Debug.Log("Word list loaded successfully. Minimum word length: " + numberOfLetters);
             string[] words = wordFile.text.Split('\n');
             foreach (string word in words)
             {

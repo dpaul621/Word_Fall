@@ -124,6 +124,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4948712513628891634, guid: 99d1d6b49495c4877abffd25d409df51, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ba55d6259d7f643c288f0d3273d93b18, type: 3}
     - target: {fileID: 7785870043939058279, guid: 99d1d6b49495c4877abffd25d409df51, type: 3}
       propertyPath: m_Name
       value: LevelButtonPrefab

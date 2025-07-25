@@ -27,16 +27,7 @@ public class Bomb : MonoBehaviour
     // This function can be called to trigger the bomb
     void OnEnable()
     {
-        TriggerBomb(); 
-        if (bombAnimator == null)
-        {
-            bombAnimator = GetComponent<Animator>(); // Get the Animator component if not assigned
-        }
 
-        if (circleCollider == null)
-        {
-            circleCollider = GetComponent<CircleCollider2D>();
-        }
     }
     public void TriggerBomb()
     {

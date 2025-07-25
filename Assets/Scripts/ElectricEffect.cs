@@ -69,10 +69,22 @@ public class ElectricEffect : MonoBehaviour
         if (parentLetter != null)
         {
             Destroy(parentLetter);
+            Word wordScript = FindObjectOfType<Word>();
+            if (wordScript != null)
+            {
+                wordScript.lettersCleared += 0.5f; // Increment letters cleared by
+            }
         }
         else
         {
             Debug.LogWarning("Parent letter is null, cannot destroy effect.");
         }
     }
+    
+    public void ElectricBonusScore()
+    {
+        GameObject bonus = Resources.Load<GameObject>("ElectricBonusScore");
+        Instantiate(bonus, transform.position, Quaternion.identity);
+    }
+
 }

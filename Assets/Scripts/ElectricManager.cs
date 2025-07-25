@@ -37,13 +37,21 @@ public class ElectricManager : MonoBehaviour
         for(int i = 0; i < electricEffects.Length; i++)
         {
             StartCoroutine(DelayedDestructionElectric(delay * i, electricEffects[i]));
-            Debug.Log("Electric effect triggered for: " + delay);
         }
     }
 
     IEnumerator DelayedDestructionElectric(float delayTime, GameObject effectLetter)
     {
         yield return new WaitForSeconds(delayTime);
-        effectLetter.GetComponent<ElectricEffect>().TriggerElectricEffect();
+        if (effectLetter == null)
+        {
+
+            yield break; // Exit the coroutine if the effect letter is null
+        }
+        else
+        {
+            effectLetter.GetComponent<ElectricEffect>().TriggerElectricEffect();
+        }
+
     }
 }

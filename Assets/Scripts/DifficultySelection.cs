@@ -10,38 +10,42 @@ public class DifficultySelection : MonoBehaviour
     public GameObject backgroundWithTitle;
     public GameObject backgroundWithoutTitle;
     public GameManager gameManager;
+    public LEVELSELECTOR levelSelector;
 
     public float difficultySetting = 1;
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        //levelSelector = FindObjectOfType<LEVELSELECTOR>();
     }
     public void OnEasyClick()
     {
         difficultySetting = 1;
-        gameManager.Difficulty = 1; 
+        gameManager.Difficulty = 1;
         Debug.Log("Difficulty set to Easy");
         LevelsAppear();
+        HapticFeedback.Trigger();
     }
     public void OnMediumClick()
     {
         difficultySetting = 2;
         gameManager.Difficulty = 2;
-        Debug.Log("Difficulty set to Medium");
+        HapticFeedback.Trigger();
+        //  Debug.Log("Difficulty set to Medium");
         LevelsAppear();
     }
     public void OnHardClick()
     {
         difficultySetting = 3;
         gameManager.Difficulty = 3;
-        Debug.Log("Difficulty set to Hard");
+        HapticFeedback.Trigger();
         LevelsAppear();
     }
     public void OnExperimentalClick()
     {
         difficultySetting = 1;
         gameManager.Difficulty = 1;
-        Debug.Log("Difficulty set to Experimental");
+        //    Debug.Log("Difficulty set to Experimental");
         SceneManager.LoadScene(12);
     }
     void LevelsAppear()
@@ -52,8 +56,26 @@ public class DifficultySelection : MonoBehaviour
         backgroundWithTitle.SetActive(false);
     }
 
+    void Update()
+    {
+        //levelSelector = FindObjectOfType<LEVELSELECTOR>();
+    }
     public void LevelsDisappear()
     {
+        foreach (Transform child in levelSelector.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        HapticFeedback.Trigger();
+        levelButtons.SetActive(false);
+        difficultyButtons.SetActive(true);
+        backgroundWithoutTitle.SetActive(false);
+        backgroundWithTitle.SetActive(true);
+    }
+
+    IEnumerator Destroy()
+    {
+        yield return new WaitForEndOfFrame();
         levelButtons.SetActive(false);
         difficultyButtons.SetActive(true);
         backgroundWithoutTitle.SetActive(false);

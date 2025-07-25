@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.Rendering.Universal;
 
 public class Letter : MonoBehaviour
 {
@@ -22,10 +23,10 @@ public class Letter : MonoBehaviour
     public bool selected = false;
     public GameObject selectedEffect;
     public GameObject selectedEffectPrefab;
-    GameObject ElectricEffect;
+    public GameObject ElectricEffect;
     public GameObject ElectricEffectPrefab;
     public Animator ElectricAnimator;
-    public float chanceOfElectricEffect = 0.0f; 
+    public float chanceOfElectricEffect = 0.0f;
     public bool isElectric = false;
     public bool letterIsBomb = false;
     public GameObject BombPrefab;
@@ -33,6 +34,20 @@ public class Letter : MonoBehaviour
     public Animator animator;
     public float bombDelay = 0.15f;
     public Pause pauseScript;
+    public float spawnXLocation = 0f; // Set this to the desired spawn X location
+    public bool destroyedByExplosion = false;
+    public GameObject letterFlashWhenClickedPrefab;
+    public GameObject scoreAddedImage;
+    public GameObject bombBonusPrefab;
+    public GameObject electricBonusPrefab;
+    public float dayNightReference;
+    private Light2D lightInstance;
+    public bool isVowel;
+
+    public void Setup(LetterData data)
+    {
+        isVowel = data.isVowel;
+    }
     private void Awake()
     {
         GameObject inputObj = GameObject.FindGameObjectWithTag("TextInputField");
@@ -60,6 +75,7 @@ public class Letter : MonoBehaviour
     }
     private void Start()
     {
+        //scoreAddedImage = GameObject.FindObjectOfType<ScoreAddedImage>().gameObject;
         pauseScript = GameObject.FindGameObjectWithTag("PauseButton").GetComponent<Pause>();
         _rigidbody2D.velocity = new Vector2(0, letterSpawnScript.currentLetterMovementSpeed);
         GameObject particleObject = GameObject.Find("Particles_Click");
@@ -75,8 +91,10 @@ public class Letter : MonoBehaviour
         }
         char firstLetter = gameObject.name[0];
         animator.runtimeAnimatorController = Resources.Load<RuntimeAnimatorController>($"Animations/{firstLetter}");
+        animator.SetBool("isSizzling", false);
         if (letterIsBomb == true)
         {
+            animator.SetBool("isSizzling", false);
             StartCoroutine(WaitAndSetSizzling());
         }
         else
@@ -87,21 +105,86 @@ public class Letter : MonoBehaviour
                 ElectricAnimator = ElectricEffect.GetComponent<Animator>();
             }
         }
+        StartCoroutine(TurnOffLights());
     }
+    IEnumerator TurnOffLights()
+    {
+        yield return new WaitForEndOfFrame();
+        if (GameManager.Instance != null)
+        {
+            float progress = (float)GameManager.Instance.GMLevel / 40;
+            float chunkProgress = (progress % 0.25f) / 0.25f;
+            dayNightReference = chunkProgress;
+            if (dayNightReference == 0.0f)
+            {
+                dayNightReference = 1.0f;
+            }
+            GameObject lightTest = transform.Find("light test").gameObject;
+            if(dayNightReference <= 0.35f)
+            {
+                lightTest.SetActive(false);
+            }
 
+            /*Debug.Log("light increased to " + light.intensity + " for " + gameObject.name);
+            yield return new WaitForSeconds(1f);
+            light.intensity = 10f;
+            Debug.Log("light increased to " + light.intensity + " for " + gameObject.name);
+            yield return new WaitForSeconds(1f);
+             Debug.Log("light increased to " + light.intensity + " for " + gameObject.name);
+            if (dayNightReference <= 0.25)
+            {
+                Debug.Log("Turning off light test " + lightTest.name);
+                lightTest.SetActive(false);
+            }
+            if (dayNightReference <= 0.5f)
+            {
+                Debug.Log("LIGHT SHOULD BE 0.5 " + light.intensity + " " + lightTest.name);
+                light.intensity = 10f;
+
+            }
+            if (dayNightReference > 0.5f)
+            {
+                if (light != null)
+                {
+                    //light.intensity = 1f;
+                }
+            }
+            if (dayNightReference > 0.75f)
+            {
+                if (light != null)
+                {
+                    light.intensity = 1.3f;
+                }
+            }
+            else
+            {
+                // Additional logic for night phase
+            }*/
+        }
+    }
     public void TriggerElectricEffect()
     {
         if (ElectricAnimator != null)
         {
             ElectricAnimator.SetTrigger("ElectricExplosion");
             Destroy(selectedEffect);
+
+        }
+        else
+        {
+            Debug.LogWarning("ElectricAnimator is null, cannot trigger electric effect.");
         }
     }
-    //wait a frame then set bool to isSizzling
     IEnumerator WaitAndSetSizzling()
     {
-        Debug.Log("Waiting for end of frame to set isSizzling to true for: " + gameObject.name);
-        yield return new WaitForEndOfFrame(); 
+        yield return new WaitForEndOfFrame();
+        // Get the current time
+        float now = Time.time;
+        // Calculate the next whole second (or use Mathf.Ceil(now / interval) * interval for custom intervals)
+        float nextSecond = Mathf.Ceil(now);
+        // Wait until that time
+        yield return new WaitForSeconds(nextSecond - now);
+        // Trigger the animation
         animator.SetBool("isSizzling", true);
     }
     public void SubmitParticlesFunction()
@@ -116,14 +199,37 @@ public class Letter : MonoBehaviour
             Destroy(fx, 2f); // cleanup after 2 seconds
         }
     }
+    void DeactivateLightIfElectric()
+    {
+        if (ElectricEffect != null)
+        {
+            Transform lightTest = gameObject.transform.Find("light test");
+            if (lightTest != null)
+            {
+                lightTest.gameObject.SetActive(false);
+            }
+        }
+    }
     private void Update()
     {
+        DeactivateLightIfElectric();
         CheckIfLetterAboveAndBelow();
         if (pauseScript.isPaused == false)
         {
             TouchUpdate();
         }
         SelectedeffectActivator();
+        //set letter transform rotation z to zero
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        //set the letters x position to its spawn x position
+        //if spawnxlocation is not set, do not change the x position
+        //if this object was instantiated 
+        //find the x value of this objec that is closest to ending a .5
+
+        // If spawnXLocation is not set, find the closest x value to ending in .5
+        float closestX = Mathf.Round(transform.position.x * 2) / 2; // Round to nearest .5
+        spawnXLocation = closestX;
+        transform.position = new Vector3(spawnXLocation, transform.position.y, transform.position.z);
     }
     void CheckIfLetterAboveAndBelow()
     {
@@ -172,6 +278,9 @@ public class Letter : MonoBehaviour
     }
     private void TouchUpdate()
     {
+        if (Time.timeScale == 0f)
+                return;
+
 #if UNITY_EDITOR
         // Only check mouse input in the editor
         if (Input.GetMouseButtonDown(0))
@@ -209,7 +318,6 @@ public class Letter : MonoBehaviour
             LetterSelected(hitObject);
         }
     }
-
     void SelectedeffectActivator()
     {
         selectedEffect = transform.Find("Letter Effect(Clone)")?.gameObject;
@@ -233,11 +341,15 @@ public class Letter : MonoBehaviour
     {
         if (letterIsUsable)
         {
+            if (!selected)
+            {
+                CreateLetterFlash();
+            }
+            HapticFeedback.Trigger();
             isInterrupted = true;
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
             if (spriteRenderer != null)
             {
-                Debug.Log("Letter selected: " + gameObject.name);
                 selected = true;
             }
             char firstLetter = gameObject.name[0];
@@ -252,10 +364,24 @@ public class Letter : MonoBehaviour
                 clickParticles.Play();
             }
             StartCoroutine(FlashCoroutine());
+            //scoreAddedImage.SetActive(true);
         }
         else if (objectClicked != null && wordScript.letterObjects.Contains(objectClicked))
         {
             //wordScript.letterObjects.Remove(objectClicked);
+        }
+    }
+
+    void CreateLetterFlash()
+    {
+        if (letterFlashWhenClickedPrefab != null)
+        {
+            GameObject flash = Instantiate(letterFlashWhenClickedPrefab, transform.position, Quaternion.identity);
+            flash.transform.SetParent(transform);
+        }
+        else
+        {
+            Debug.LogWarning("Letter flash prefab is not assigned.");
         }
     }
     private IEnumerator LetterUnusable()
@@ -328,6 +454,7 @@ public class Letter : MonoBehaviour
     //on collision with anything tagged "explosion", destroy this object
     void OnTriggerEnter2D(Collider2D other)
     {
+
         //make a other.tag match
         if (other.gameObject.CompareTag("Explosion"))
         {
@@ -335,12 +462,24 @@ public class Letter : MonoBehaviour
             {
                 Destroy(ElectricEffect);
             }
+            destroyedByExplosion = true;
+            //if the other.gameobject is not on word.letterobjects, word.lettersclears++
+            if (destroyedByExplosion == true)
+            {
+                if (!wordScript.letterObjects.Contains(gameObject))
+                {
+                    wordScript.lettersCleared += 0.7f;
+                    Instantiate(bombBonusPrefab, transform.position, Quaternion.identity);
+                }
+            }
+
             animator.SetTrigger("smallDeath");
             selectedEffect = transform.Find("Letter Effect(Clone)")?.gameObject;
             if (selectedEffect != null)
             {
                 Destroy(selectedEffect);
             }
+
         }
     }
     public void TriggerBomb()
@@ -363,12 +502,26 @@ public class Letter : MonoBehaviour
     IEnumerator BombAfterASecond()
     {
         yield return new WaitForSeconds(bombDelay);
+        ScreenShake.Instance.Shake(0.175f, 0.025f); // (duration, magnitude)
         GameObject bomb = Instantiate(BombPrefab, transform.position, Quaternion.identity, transform);
         Destroy(bomb, 0.1f);
     }
     public void DestroyMe()
     {
         // Destroy the letter object
+        /*if(destroyedByExplosion)
+        {
+            Debug.Log("Letter destroyed: " + gameObject.name);
+            wordScript.lettersCleared++;
+        }*/
         Destroy(gameObject);
-    }   
+    }
+    public void ElectricDestruction()
+    {
+        Debug.Log("Electric destruction triggered for: " + gameObject.name);
+        wordScript.lettersCleared += 0.5f;
+        //Instantiate(electricBonusPrefab, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+    }
+
 }

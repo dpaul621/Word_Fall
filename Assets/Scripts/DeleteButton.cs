@@ -18,6 +18,7 @@ public class DeleteButton : MonoBehaviour
     }
     public void DeleteAllCharacters()
     {
+        HapticFeedback.Trigger();
         inputFieldText.text = string.Empty;
     }
 

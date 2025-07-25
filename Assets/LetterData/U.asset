@@ -15,3 +15,4 @@ MonoBehaviour:
   character: 85
   frequency: 2.8
   prefab: {fileID: 7049079453477443970, guid: 0d77192e71aea4ce6847c2f2c351645c, type: 3}
+  isVowel: 1

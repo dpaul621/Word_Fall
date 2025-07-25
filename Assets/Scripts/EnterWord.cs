@@ -22,11 +22,11 @@ public class EnterWord : MonoBehaviour
     }
     public void CheckWordAndClear()
     {
+        HapticFeedback.Trigger();
         string word = GetInputWord();
 
         if (WordChecker.IsValid(word))
         {
-            Debug.Log($"✅ Valid word: {word}");
             ClearInputField();
             ClearWordScript();
         }
