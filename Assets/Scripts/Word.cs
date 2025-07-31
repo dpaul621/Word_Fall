@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
+
 public class Word : MonoBehaviour
 {
     public float lettersCleared;
@@ -22,13 +23,12 @@ public class Word : MonoBehaviour
     public ScoreAddedImage scoreAddedImage;
     public float explosionAtEndSpeed = 0.1f; 
 
-    private PlayerProgressManager progressManager;
+    //private PlayerProgressManager progressManager;
     public bool isLevelComplete = false;
     public float penaltyForShortWord = -0.1f; // -10% penalty
 
     void Start()
     {
-        progressManager = FindObjectOfType<PlayerProgressManager>();
         scoreAddedImage = GameObject.FindObjectOfType<ScoreAddedImage>();
         //access game manager script level
         if (GameManager.Instance != null)
@@ -48,6 +48,27 @@ public class Word : MonoBehaviour
         }
 
     }
+    /*IEnumerator SyncServerIfNeeded()
+    {
+        yield return new WaitForEndOfFrame(); 
+        // Only sync if marked
+        if (PlayerPrefs.GetInt("pendingServerSync", 0) == 1)
+        {
+            Debug.Log("Syncing progress to server...");
+            var progress = GameManager.Instance.playerProgress;
+
+            // choose proper difficulty
+            if (GameManager.Instance.Difficulty == 1)
+                yield return StartCoroutine(progressManager.SendEasyProgress(new EasyProgress { deviceId = progress.deviceId, levelEasy = progress.levelEasy }));
+            else if (GameManager.Instance.Difficulty == 2)
+                yield return StartCoroutine(progressManager.SendMediumProgress(new MediumProgress { deviceId = progress.deviceId, levelMedium = progress.levelMedium }));
+            else if (GameManager.Instance.Difficulty == 3)
+                yield return StartCoroutine(progressManager.SendHardProgress(new HardProgress { deviceId = progress.deviceId, levelHard = progress.levelHard }));
+
+            PlayerPrefs.DeleteKey("pendingServerSync");
+            PlayerPrefs.Save();
+        }
+    }*/
     void Update()
     {
         LetersClearedTracker();
@@ -276,21 +297,16 @@ public class Word : MonoBehaviour
     }
     void SaveProgress()
     {
-        int levelInt = (int)GameManager.Instance.GMLevel + 1; 
+        int levelInt = GameManager.Instance.GMLevel + 1;
 
-        if (GameManager.Instance.Difficulty == 1)
-        {
-            progressManager.SaveEasyProgress(levelInt);
-        }
-        else if (GameManager.Instance.Difficulty == 2)
-        {
-            progressManager.SaveMediumProgress(levelInt);
-        }
-        else if (GameManager.Instance.Difficulty == 3)
-        {
-            progressManager.SaveHardProgress(levelInt);
-        }
+        // Save to GameManager + local file
+        GameManager.Instance.SetLevelForCurrentDifficulty(levelInt);
+
+        // Mark sync needed
+        //PlayerPrefs.SetInt("pendingServerSync", 1);
+        //PlayerPrefs.Save();
     }
+
 
     IEnumerator TriggerSmallDeathsCoroutine()
     {

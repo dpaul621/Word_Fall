@@ -4,49 +4,53 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System;
+using UnityEngine.SocialPlatforms;
 
 public class LEVELSELECTOR : MonoBehaviour
 {
 
     public GameObject levelPrefab;
-    private PlayerProgressManager progressManager;
+    public GameObject grayedOutLevelPrefab;
+    //private PlayerProgressManager progressManager;
     public int levelFound;
     public int TEST;
     public GameObject loadingImage;
-    void Awake()
-    {
-        progressManager = FindObjectOfType<PlayerProgressManager>();
-        if (progressManager == null)
-        {
-            Debug.LogError("PlayerProgressManager not found in the scene.");
-        }
-    }
-
     void OnEnable()
     {
-        CreateLevelButtons();
+        StartCoroutine(CreateLevelButtons());
     }
     public void LevelOne()
     {
         SceneManager.LoadScene(1);
     }
-
     public void LevelSelectorButton()
     {
-        //int level = int.Parse(UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().text);
-        //SceneManager.LoadScene(level);
-        
         SceneManager.LoadScene(1);
         GameManager.Instance.GMLevel = int.Parse
         (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().text); 
     }
-    public void CreateLevelButtons()
+    public IEnumerator CreateLevelButtons()
     {
-        progressManager.LoadProgress();
-        StartCoroutine(WaitForProgress());
-    }
+        yield return new WaitForEndOfFrame();
+        // Wait for any existing loading coroutine to finish first, if necessary
+        if (!LocalSaveManager.HasSaveFile())
+        {
+            LocalSaveManager.Save(GameManager.Instance.playerProgress);
+        }
+        else
+        {
+            LocalSaveManager.Load();
+            GameManager.Instance.playerProgress = LocalSaveManager.Load();
+        }
 
-    IEnumerator WaitForProgress()
+        // Always load level from updated local progress
+        yield return new WaitForEndOfFrame();
+        int levelFound = GameManager.Instance.GetLevelForCurrentDifficulty();
+        if (levelFound <= 0) levelFound = 1;
+        yield return new WaitForEndOfFrame();
+        CreateLevelButtonsForReal(levelFound);
+    }
+    /*IEnumerator WaitForProgress()
     {
         if(progressManager.progress != null)
         {
@@ -97,18 +101,11 @@ public class LEVELSELECTOR : MonoBehaviour
         //wait a WaitForEndOfFrame
         yield return new WaitForEndOfFrame();
         CreateLevelButtonsForReal();
-    }
-
-    
-
-    void CreateLevelButtonsForReal()
+    }*/
+    void CreateLevelButtonsForReal(int levelUsed)
     {
-        Debug.Log(" AT MIDDLE : " + progressManager.progress.levelEasy + " " +
-            progressManager.progress.levelMedium + " " +
-            progressManager.progress.levelHard);
-        for (int i = 1; i <= levelFound; i++)
+        for (int i = 1; i <= levelUsed; i++)
         {
-            Debug.Log("levelFound: " + levelFound + ", i: " + i);
             GameObject button = Instantiate(levelPrefab);
             button.transform.SetParent(transform, false);
 
@@ -135,20 +132,38 @@ public class LEVELSELECTOR : MonoBehaviour
                 HapticFeedback.Trigger();
             });
         }
-        progressManager.progress = null; 
-        levelFound = 0; // reset levelFound to 0 after creating buttons
-        if(progressManager.progress != null)
+        for (int i = levelUsed + 1; i <= 40; i++)
         {
-            Debug.Log(" AT end : " + progressManager.progress.levelEasy + " " +
-                progressManager.progress.levelMedium + " " +
-                progressManager.progress.levelHard);
-        }
-        else
-        {
-            Debug.LogWarning("ProgressManager is null in WaitForProgress.");
+            GameObject button = Instantiate(grayedOutLevelPrefab);
+            button.transform.SetParent(transform, false);
+
+            TMP_Text textComponent = button.GetComponentInChildren<TMP_Text>();
+            textComponent.text = i.ToString();
+            RectTransform uiRect = button.GetComponent<RectTransform>();
+
+            int column = (i - 1) % 6;
+            int row = (i - 1) / 6;
+
+            float xSpacing = 200f;
+            float ySpacing = 200f;
+
+            float xPosition = column * xSpacing;
+            float yPosition = -row * ySpacing;
+
+            uiRect.anchoredPosition = new Vector2(xPosition, yPosition);
+
+            // Disable the button to make it unclickable
+            button.GetComponent<UnityEngine.UI.Button>().interactable = false;
+
+            // Optionally, visually gray it out
+            CanvasGroup canvasGroup = button.GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = button.AddComponent<CanvasGroup>();
+            }
+            //canvasGroup.alpha = 0.5f; // make it look disabled
         }
     }
-
     public void Level11()
     {
         SceneManager.LoadScene(11);
