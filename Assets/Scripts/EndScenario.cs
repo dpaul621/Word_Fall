@@ -1,4 +1,59 @@
 using System.Collections;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class EndScenario : MonoBehaviour
+{
+    public GameObject endScenarioText;
+    public float rayDistance = 1f;
+    public float raycastOffsetX = 0.5f;
+    public float raycastOffsetY = 0.5f;
+    private bool scenarioTriggered = false;
+
+    void FixedUpdate()
+    {
+        // Reset all LetterOnGrid objects at the beginning of the frame
+        /*foreach (LetterOnGrid letter in FindObjectsOfType<LetterOnGrid>())
+        {
+            letter.isUnderRay = false;
+        }
+
+        Vector2 rayOrigin = new Vector2(transform.position.x - raycastOffsetX, transform.position.y - raycastOffsetY);
+        Vector2 rayDirection = Vector2.right;
+
+        Debug.DrawRay(rayOrigin, rayDirection * rayDistance, Color.green);
+        RaycastHit2D hit = Physics2D.Raycast(rayOrigin, rayDirection, rayDistance);
+
+        if (hit.collider != null && hit.collider.CompareTag("LetterOnGrid"))
+        {
+            LetterOnGrid letter = hit.collider.GetComponent<LetterOnGrid>();
+            if (letter != null)
+            {
+                letter.isUnderRay = true;
+            }
+        }*/
+    }
+
+    public void TriggerEnd()
+    {
+        if (!scenarioTriggered)
+        {
+            scenarioTriggered = true;
+            StartCoroutine(EndScenarioCoroutine());
+        }
+    }
+
+    IEnumerator EndScenarioCoroutine()
+    {
+        endScenarioText.SetActive(true);
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+}
+
+
+
+/*using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using Unity.VisualScripting;
@@ -35,4 +90,4 @@ public class EndScenario : MonoBehaviour
         yield return new WaitForSeconds(5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-}
+}*/

@@ -31,44 +31,13 @@ public class Word : MonoBehaviour
     {
         scoreAddedImage = GameObject.FindObjectOfType<ScoreAddedImage>();
         //access game manager script level
-        if (GameManager.Instance != null)
-        {
-            //if game manager level is between 0 and 12
-            amountOfLettersToAdvance = 20 + (GameManager.Instance.GMLevel * 5f); // Adjust this formula as needed
-            //if this this makes 80, then only add two per level
-            if (amountOfLettersToAdvance > 80f)
-            {
-                amountOfLettersToAdvance = 80f + ((GameManager.Instance.GMLevel - 12) * 2f);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("GameManager instance not found. Using default amount of letters to advance.");
-            amountOfLettersToAdvance = 100f; // Default value if GameManager is not found
-        }
-
+        amountOfLettersToAdvance = CalculateLettersToAdvance(GameManager.Instance.GMLevel);
     }
-    /*IEnumerator SyncServerIfNeeded()
+    float CalculateLettersToAdvance(int level)
     {
-        yield return new WaitForEndOfFrame(); 
-        // Only sync if marked
-        if (PlayerPrefs.GetInt("pendingServerSync", 0) == 1)
-        {
-            Debug.Log("Syncing progress to server...");
-            var progress = GameManager.Instance.playerProgress;
-
-            // choose proper difficulty
-            if (GameManager.Instance.Difficulty == 1)
-                yield return StartCoroutine(progressManager.SendEasyProgress(new EasyProgress { deviceId = progress.deviceId, levelEasy = progress.levelEasy }));
-            else if (GameManager.Instance.Difficulty == 2)
-                yield return StartCoroutine(progressManager.SendMediumProgress(new MediumProgress { deviceId = progress.deviceId, levelMedium = progress.levelMedium }));
-            else if (GameManager.Instance.Difficulty == 3)
-                yield return StartCoroutine(progressManager.SendHardProgress(new HardProgress { deviceId = progress.deviceId, levelHard = progress.levelHard }));
-
-            PlayerPrefs.DeleteKey("pendingServerSync");
-            PlayerPrefs.Save();
-        }
-    }*/
+        float letters = 9.896f + Mathf.Log(level + 1.040f) * 19.784f + Mathf.Pow(level, 0.844f);
+        return Mathf.Round(letters);
+    }
     void Update()
     {
         LetersClearedTracker();
@@ -280,7 +249,7 @@ public class Word : MonoBehaviour
     {
         StartCoroutine(TriggerSmallDeathsCoroutine());
         SaveProgress();
-        if (GameManager.Instance.GMLevel >= 40)
+        if (GameManager.Instance.GMLevel >= 100)
         {
             Debug.Log("You have completed all levels! Game Over.");
             VictoryImage.SetActive(true);
@@ -292,19 +261,12 @@ public class Word : MonoBehaviour
             LevelCompleteImage.SetActive(true);
             GameManager.Instance.GMLevel++;
             yield return new WaitForSeconds(5f);
-
         }
     }
     void SaveProgress()
     {
         int levelInt = GameManager.Instance.GMLevel + 1;
-
-        // Save to GameManager + local file
         GameManager.Instance.SetLevelForCurrentDifficulty(levelInt);
-
-        // Mark sync needed
-        //PlayerPrefs.SetInt("pendingServerSync", 1);
-        //PlayerPrefs.Save();
     }
 
 

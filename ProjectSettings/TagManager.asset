@@ -12,6 +12,7 @@ TagManager:
   - Explosion
   - ElectricEffect
   - PauseButton
+  - EndScenario
   layers:
   - Default
   - TransparentFX

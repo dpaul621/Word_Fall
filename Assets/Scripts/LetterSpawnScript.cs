@@ -5,13 +5,18 @@ using System.Linq;
 using System.IO;
 public class LetterSpawnScript : MonoBehaviour
 {
-    float scanTimer = 0f;
+    public int currentLetterTier = -1;  // Tracks which difficulty tier we’re in
+    //private float earlyGameCheckTimer = 0f;
+    //private float earlyGameCheckInterval = 0.75f;
+    private float scanTimer = 0f;
     public float scanInterval = 1f; // every 1 second
+    public float letterThresholdForEarlyExit = 30; // threshold for early game exit
     int currentVowelCount = 0;
-    int currentTotalLetterCount = 0;
+    public int currentTotalLetterCount = 0;
     public List<LetterData> letterDataList;
     public List<float> spawnXValues;
     public float earlyGameTimer = 12f;
+    float gameTimer;
     public float lowRangeSpawnInterval = 0.5f;
     public float highRangeSpawnInterval = 2.0f;
     public float chanceOfAdditionalLetter = 0.2f;
@@ -28,11 +33,7 @@ public class LetterSpawnScript : MonoBehaviour
     private float? lastXValue = null;
     public float chancesOfABomb = 0.0f;
     public float chancesOfElectic = 0.0f;
-    Letter letterScript;
     public float level;
-    float sceneTimer;
-    bool earlyTimerSet = false;
-    bool lateTimerSet = false;
     private Queue<char> plantedLetterQueue = new Queue<char>();
     public float vowelRatio;
     private List<string> longWords = new List<string>();
@@ -45,107 +46,61 @@ public class LetterSpawnScript : MonoBehaviour
         if (_spawnRoutine != null)
             StopCoroutine(_spawnRoutine);
     }
-    void Awake()
+    IEnumerator NewLevelSetter()
     {
-        currentLowRangeSpawnInterval = earlyLowRangeSpawnInterval;
-        currentHighRangeSpawnInterval = earlyHighRangeSpawnInterval;
-        currentChanceOfAdditionalLetter = earlyChanceOfAdditionalLetter;
-        currentLetterMovementSpeed = earlyLetterMovementSpeed;
-    }
-    IEnumerator LevelSetter()
-    {
-        //wait until end of frame to ensure GameManager.Instance is ready
-        yield return new WaitForEndOfFrame();
-        earlyGameTimer = 12f + (level * 2f);
-        if (GameManager.Instance.GMLevel > 1 && earlyGameTimer < 30)
-            earlyGameTimer = 30f;
-        if (GameManager.Instance.GMLevel > 30)
-            earlyGameTimer = 0f;
+        yield return new WaitForEndOfFrame(); // wait until end of frame to ensure GameManager.Instance is ready
+        DifficultySettings settings = GetDifficultySettings(GameManager.Instance.GMLevel);
+        lowRangeSpawnInterval = settings.lowRangeSpawn;
+        highRangeSpawnInterval = settings.highRangeSpawn;
+        chanceOfAdditionalLetter = settings.chanceOfAdditionalLetter;
+        letterMovementSpeed = settings.letterSpeed;
+        chancesOfABomb = settings.chanceOfBomb;
+        chancesOfElectic = settings.chanceOfElectric;
 
-        lowRangeSpawnInterval = 3f - (level * 0.1f);
-        if (lowRangeSpawnInterval < 0.5f)
-            lowRangeSpawnInterval = 0.5f;
-
-        highRangeSpawnInterval = 4f - (level * 0.1f);
-        if (highRangeSpawnInterval < 1f)
-            highRangeSpawnInterval = 1f;
-
-        chanceOfAdditionalLetter = 0.01f + (level * 0.005f);
-        if (chanceOfAdditionalLetter >= 0.16f)
-            chanceOfAdditionalLetter = 0.0f;
-        letterMovementSpeed = -0.175f - (level * 0.01f);
-        earlyLowRangeSpawnInterval = 1f;
-        earlyHighRangeSpawnInterval = 2f;
-        earlyChanceOfAdditionalLetter = 0.11f;
-        earlyLetterMovementSpeed = -0.42f;
+        currentLowRangeSpawnInterval = lowRangeSpawnInterval;
+        currentHighRangeSpawnInterval = highRangeSpawnInterval;
+        currentChanceOfAdditionalLetter = chanceOfAdditionalLetter;
+        currentLetterMovementSpeed = letterMovementSpeed;
     }
     void Start()
     {
         _spawnRoutine = StartCoroutine(SpawnLoop());
         level = GameManager.Instance.GMLevel;
-        StartCoroutine(LevelSetter());
-        if (level >= 1 && level <= 10)
-        {
-            chancesOfABomb = 0f;
-            chancesOfElectic = 0.0f;
-        }
-        if (level >= 11 && level <= 15)
-        {
-            chancesOfABomb = 0.15f;
-            chancesOfElectic = 0.0f;
-        }
-        if (level >= 15 && level <= 20)
-        {
-            chancesOfABomb = 0.2f;
-            chancesOfElectic = 0.0f;
-        }
-        if (level >= 21 && level <= 25)
-        {
-            chancesOfABomb = 0.2f;
-            chancesOfElectic = 0.0f;
-        }
-        if (level >= 25 && level <= 30)
-        {
-            chancesOfABomb = 0.2f;
-            chancesOfElectic = 0.0f;
-        }
-        if (level == 31)
-        {
-            chancesOfABomb = 0.0f;
-            chancesOfElectic = 0.50f;
-        }
-        if (level == 32)
-        {
-            chancesOfABomb = 0.0f;
-            chancesOfElectic = 0.45f;
-        }
-        if (level == 33)
-        {
-            chancesOfABomb = 0.0f;
-            chancesOfElectic = 0.45f;
-        }
-        if (level == 34)
-        {
-            chancesOfABomb = 0.0f;
-            chancesOfElectic = 0.40f;
-        }
-        if (level == 35)
-        {
-            chancesOfABomb = 0.0f;
-            chancesOfElectic = 0.40f;
-
-        }
-        if (level == 36)
-        {
-            chancesOfABomb = 0.0f;
-            chancesOfElectic = 0.35f;
-        }
-        if (level >= 37 && level <= 40)
-        {
-            chancesOfABomb = 0.20F;
-            chancesOfElectic = 0.30f;
-        }
+        StartCoroutine(NewLevelSetter());
+        Debug.Log("Early game timer bypassed. Using full difficulty tier system from level start.");
         MakeSixLetterWords();
+        if (GameManager.Instance.GMLevel < 25)
+        {
+            earlyGameTimer = 0f; 
+        }
+    }
+    DifficultySettings GetDifficultySettings(int level)
+    {
+        float t = Mathf.Clamp01((level - 1f) / 99f); // Normalized value (0 to 1) across 100 levels
+
+        int subLevel = ((level - 1) % 20) + 1;  // ✅ Valid outside return
+
+        return new DifficultySettings
+        {
+            lowRangeSpawn = Mathf.Lerp(2.9f, 0.5f, t),
+            highRangeSpawn = Mathf.Lerp(3.9f, 1f, t),
+            chanceOfAdditionalLetter = Mathf.Lerp(0.015f, 0.6f, t),
+            letterSpeed = Mathf.Lerp(-0.185f, -0.575f, t),
+
+            earlyLowRange = 0.5f,
+            earlyHighRange = 1.5f,
+            earlyChanceOfAdditional = 0.13f,
+            earlyLetterSpeed = -0.42f,
+
+            chanceOfBomb = (subLevel >= 11 && subLevel <= 15) ? 0.15f :
+                        (subLevel >= 16 && subLevel <= 20) ? 0.2f :
+                        0f,
+
+            chanceOfElectric = (subLevel == 16) ? 0.5f :
+                            (subLevel == 17) ? 0.4f :
+                            (subLevel >= 18) ? 0.35f :
+                            0f
+        };
     }
     void MakeSixLetterWords()
     {
@@ -168,32 +123,17 @@ public class LetterSpawnScript : MonoBehaviour
     }
     void FixedUpdate()
     {
-        sceneTimer += Time.fixedDeltaTime;
-        if (sceneTimer < earlyGameTimer && !earlyTimerSet)
+
+        //use early game timer. only use below code if
+        gameTimer += Time.deltaTime;
+        int tier = GetLetterDifficultyTier(currentTotalLetterCount);
+        if (tier != currentLetterTier && gameTimer >= earlyGameTimer && GameManager.Instance.GMLevel <= 40)
         {
-            currentLowRangeSpawnInterval = earlyLowRangeSpawnInterval;
-            currentHighRangeSpawnInterval = earlyHighRangeSpawnInterval;
-            currentChanceOfAdditionalLetter = earlyChanceOfAdditionalLetter;
-            currentLetterMovementSpeed = earlyLetterMovementSpeed;
-            earlyTimerSet = true;
-            Debug.Log("Using early game spawn parameters. early timerSet: " + earlyTimerSet);
+            Debug.Log("early game allset");
+            ApplyTierDifficulty(tier);
+            currentLetterTier = tier;
         }
-        if (sceneTimer > earlyGameTimer && !lateTimerSet)
-        {
-            if (currentChanceOfAdditionalLetter != chanceOfAdditionalLetter ||
-                currentLowRangeSpawnInterval != lowRangeSpawnInterval ||
-                currentHighRangeSpawnInterval != highRangeSpawnInterval ||
-                currentLetterMovementSpeed != letterMovementSpeed)
-            {
-                Debug.Log("Updating spawn parameters after early game timer.");
-                currentLowRangeSpawnInterval = lowRangeSpawnInterval;
-                currentHighRangeSpawnInterval = highRangeSpawnInterval;
-                currentChanceOfAdditionalLetter = chanceOfAdditionalLetter;
-                currentLetterMovementSpeed = letterMovementSpeed;
-                lateTimerSet = true;
-                Debug.Log("Using late game spawn parameters. late timerSet: " + lateTimerSet);
-            }
-        }
+
         scanTimer += Time.deltaTime;
         if (scanTimer >= scanInterval)
         {
@@ -201,6 +141,68 @@ public class LetterSpawnScript : MonoBehaviour
             scanTimer = 0f;
         }
         InjectRandomWord();
+    }
+    int GetLetterDifficultyTier(int count)
+    {
+        if (count < 5) return 0;   // Extreme hard
+        if (count < 10) return 1;  // Extra hard
+        if (count < 15) return 2;  // Hard
+        if (count < 25) return 3;  // Medium
+        if (count < 30) return 4;  // Early default
+        return 5;                  // Exit early game
+    }
+    void ApplyTierDifficulty(int tier)
+    {
+        switch (tier)
+        {
+            case 0: // Extreme hard
+                currentLowRangeSpawnInterval = Mathf.Max(lowRangeSpawnInterval * 0.35f, 0.25f);
+                currentHighRangeSpawnInterval = Mathf.Max(highRangeSpawnInterval * 0.35f, 0.35f);
+                currentChanceOfAdditionalLetter = Mathf.Min(chanceOfAdditionalLetter * 2.5f, 0.95f);
+                currentLetterMovementSpeed = letterMovementSpeed * 1.75f;
+                Debug.Log("Difficulty TIER 0 applied (extreme hard)");
+                break;
+
+            case 1: // Extra hard
+                currentLowRangeSpawnInterval = Mathf.Max(lowRangeSpawnInterval * 0.55f, 0.3f);
+                currentHighRangeSpawnInterval = Mathf.Max(highRangeSpawnInterval * 0.55f, 0.5f);
+                currentChanceOfAdditionalLetter = Mathf.Min(chanceOfAdditionalLetter * 2.0f, 0.9f);
+                currentLetterMovementSpeed = letterMovementSpeed * 1.6f;
+                Debug.Log("Difficulty TIER 1 applied (extra hard)");
+                break;
+
+            case 2: // Hard
+                currentLowRangeSpawnInterval = Mathf.Max(lowRangeSpawnInterval * 0.7f, 0.4f);
+                currentHighRangeSpawnInterval = Mathf.Max(highRangeSpawnInterval * 0.7f, 0.7f);
+                currentChanceOfAdditionalLetter = Mathf.Min(chanceOfAdditionalLetter * 1.5f, 0.8f);
+                currentLetterMovementSpeed = letterMovementSpeed * 1.35f;
+                Debug.Log("Difficulty TIER 2 applied (hard)");
+                break;
+
+            case 3: // Medium
+                currentLowRangeSpawnInterval = lowRangeSpawnInterval * 0.85f;
+                currentHighRangeSpawnInterval = highRangeSpawnInterval * 0.85f;
+                currentChanceOfAdditionalLetter = chanceOfAdditionalLetter * 1.2f;
+                currentLetterMovementSpeed = letterMovementSpeed * 1.2f;
+                Debug.Log("Difficulty TIER 3 applied (medium)");
+                break;
+
+            case 4: // Default early
+                currentLowRangeSpawnInterval = earlyLowRangeSpawnInterval;
+                currentHighRangeSpawnInterval = earlyHighRangeSpawnInterval;
+                currentChanceOfAdditionalLetter = earlyChanceOfAdditionalLetter;
+                currentLetterMovementSpeed = earlyLetterMovementSpeed;
+                Debug.Log("Difficulty TIER 4 applied (default early)");
+                break;
+
+            case 5: // Normal game (exit early)
+                currentLowRangeSpawnInterval = lowRangeSpawnInterval;
+                currentHighRangeSpawnInterval = highRangeSpawnInterval;
+                currentChanceOfAdditionalLetter = chanceOfAdditionalLetter;
+                currentLetterMovementSpeed = letterMovementSpeed;
+                Debug.Log("TIER 5: Using standard level difficulty.");
+                break;
+        }
     }
     void InjectRandomWord()
     {
@@ -264,7 +266,6 @@ public class LetterSpawnScript : MonoBehaviour
             plantedLetterQueue.Enqueue(c);
         }
     }
-
     void SpawnLetterFromWeightedList()
     {
         List<float> availableX = new List<float>(spawnXValues);

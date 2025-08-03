@@ -75,7 +75,7 @@ public class PreGameWordSpawn : MonoBehaviour
 
         zElectric = letterSpawnScript.letterDataList[25].prefab;
 
-        if (GameManager.Instance.GMLevel == 31)
+        if (GameManager.Instance.GMLevel == 16 || GameManager.Instance.GMLevel == 36 || GameManager.Instance.GMLevel == 56 || GameManager.Instance.GMLevel == 76 || GameManager.Instance.GMLevel == 96)
         {
             //spell chain in the spawn positions 6 through 10
             Instantiate(letterPrefabs['C'], spawnPosition6, Quaternion.identity);
@@ -90,7 +90,7 @@ public class PreGameWordSpawn : MonoBehaviour
                 electricZLetter.GetComponent<Letter>().isElectric = true;
             }
         }
-        if (GameManager.Instance.GMLevel == 32 || GameManager.Instance.GMLevel == 34)
+        if (GameManager.Instance.GMLevel == 17 || GameManager.Instance.GMLevel == 37 || GameManager.Instance.GMLevel == 57 || GameManager.Instance.GMLevel == 77 || GameManager.Instance.GMLevel == 97)
         {
             foreach (Vector3 position in row1)
             {
@@ -103,16 +103,7 @@ public class PreGameWordSpawn : MonoBehaviour
                 electricZLetter.GetComponent<Letter>().isElectric = true;
             }
         }
-        if (GameManager.Instance.GMLevel == 35)
-        {
-
-            foreach (Vector3 position in row1)
-            {
-                GameObject electricZLetter = Instantiate(zElectric, position, Quaternion.identity);
-                electricZLetter.GetComponent<Letter>().isElectric = true;
-            }
-        }
-        if (GameManager.Instance.GMLevel == 33)
+        if (GameManager.Instance.GMLevel == 18 || GameManager.Instance.GMLevel == 38 || GameManager.Instance.GMLevel == 58 || GameManager.Instance.GMLevel == 78 || GameManager.Instance.GMLevel == 98)
         {
             foreach (Vector3 position in row1)
             {
@@ -130,7 +121,7 @@ public class PreGameWordSpawn : MonoBehaviour
                 electricZLetter.GetComponent<Letter>().isElectric = true;
             }
         }
-        if (GameManager.Instance.GMLevel == 11)
+        if (GameManager.Instance.GMLevel == 11 || GameManager.Instance.GMLevel == 31 || GameManager.Instance.GMLevel == 51 || GameManager.Instance.GMLevel == 71 || GameManager.Instance.GMLevel == 91)
         {
             bombLetterB = letterPrefabs['B'];
             Instantiate(letterPrefabs['B'], spawnPosition0, Quaternion.identity);
@@ -151,7 +142,14 @@ public class PreGameWordSpawn : MonoBehaviour
             Instantiate(letterPrefabs['Z'], spawnPosition15, Quaternion.identity);
             Instantiate(letterPrefabs['Z'], spawnPosition17, Quaternion.identity);
         }
-        if (GameManager.Instance.GMLevel != 11 && GameManager.Instance.GMLevel != 30 && GameManager.Instance.GMLevel != 31 && GameManager.Instance.GMLevel != 32 && GameManager.Instance.GMLevel != 33 && GameManager.Instance.GMLevel != 34)
+        HashSet<int> excludedLevels = new HashSet<int>
+        {
+            11, 31, 51, 71, 91,
+            16, 36, 56, 76, 96,
+            17, 37, 57, 77, 97,
+            18, 38, 58, 78, 98
+        };
+        if (!excludedLevels.Contains(GameManager.Instance.GMLevel))
         {
             //randomly select from one of the three words: good luck, keep going, faster
             int randomWord = UnityEngine.Random.Range(0, 7);

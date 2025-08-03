@@ -5,16 +5,19 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System;
 using UnityEngine.SocialPlatforms;
+using UnityEngine.UI;
 
 public class LEVELSELECTOR : MonoBehaviour
 {
 
     public GameObject levelPrefab;
     public GameObject grayedOutLevelPrefab;
-    //private PlayerProgressManager progressManager;
     public int levelFound;
     public int TEST;
     public GameObject loadingImage;
+    public Toggle isBetaToggle;
+
+
     void OnEnable()
     {
         StartCoroutine(CreateLevelButtons());
@@ -33,75 +36,35 @@ public class LEVELSELECTOR : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         // Wait for any existing loading coroutine to finish first, if necessary
-        if (!LocalSaveManager.HasSaveFile())
+        if (isBetaToggle.isOn)
         {
-            LocalSaveManager.Save(GameManager.Instance.playerProgress);
+            yield return new WaitForEndOfFrame();
+            int levelFound = 100;
+            if (levelFound <= 0) levelFound = 1;
+            yield return new WaitForEndOfFrame();
+            CreateLevelButtonsForReal(levelFound);
         }
         else
         {
-            LocalSaveManager.Load();
-            GameManager.Instance.playerProgress = LocalSaveManager.Load();
+            if (!LocalSaveManager.HasSaveFile())
+            {
+                LocalSaveManager.Save(GameManager.Instance.playerProgress);
+            }
+            else
+            {
+                LocalSaveManager.Load();
+                GameManager.Instance.playerProgress = LocalSaveManager.Load();
+            }
+
+            // Always load level from updated local progress
+            yield return new WaitForEndOfFrame();
+            int levelFound = GameManager.Instance.GetLevelForCurrentDifficulty();
+            if (levelFound <= 0) levelFound = 1;
+            yield return new WaitForEndOfFrame();
+            CreateLevelButtonsForReal(levelFound);
         }
 
-        // Always load level from updated local progress
-        yield return new WaitForEndOfFrame();
-        int levelFound = GameManager.Instance.GetLevelForCurrentDifficulty();
-        if (levelFound <= 0) levelFound = 1;
-        yield return new WaitForEndOfFrame();
-        CreateLevelButtonsForReal(levelFound);
     }
-    /*IEnumerator WaitForProgress()
-    {
-        if(progressManager.progress != null)
-        {
-            Debug.Log(" AT beginning : " + progressManager.progress.levelEasy + " " +
-                progressManager.progress.levelMedium + " " +
-                progressManager.progress.levelHard);
-        }
-        else
-        {
-            Debug.LogWarning("ProgressManager is null in WaitForProgress.");
-        }
-
-        while (progressManager.progress == null)
-        {
-            Debug.Log("Waiting for progress to be loaded...");
-            loadingImage.SetActive(true);
-            yield return null; // wait until progress is loaded
-        }
-        loadingImage.SetActive(false);
-
-        if (GameManager.Instance.Difficulty == 1)
-        {
-            levelFound = progressManager.progress.levelEasy;
-            Debug.Log("Difficulty set to Easy, level found: " + levelFound);
-        }
-        else if (GameManager.Instance.Difficulty == 2)
-        {
-            levelFound = progressManager.progress.levelMedium;
-            Debug.Log("Difficulty set to Medium, level found: " + levelFound);
-        }
-        else if (GameManager.Instance.Difficulty == 3)
-        {
-            levelFound = progressManager.progress.levelHard;
-            Debug.Log("Difficulty set to Hard, level found: " + levelFound);
-        }
-        else
-        {
-
-            Debug.LogError("Difficulty not set correctly, defaulting to Easy. Difficulty: " + GameManager.Instance.Difficulty);
-            levelFound = progressManager.progress.levelEasy;
-        }
-        if (levelFound <= 0)
-        {
-            levelFound = 1;
-        }
-
-
-        //wait a WaitForEndOfFrame
-        yield return new WaitForEndOfFrame();
-        CreateLevelButtonsForReal();
-    }*/
     void CreateLevelButtonsForReal(int levelUsed)
     {
         for (int i = 1; i <= levelUsed; i++)
@@ -113,8 +76,8 @@ public class LEVELSELECTOR : MonoBehaviour
             textComponent.text = i.ToString();
             RectTransform uiRect = button.GetComponent<RectTransform>();
 
-            int column = (i - 1) % 6;
-            int row = (i - 1) / 6;
+            int column = (i - 1) % 7;
+            int row = (i - 1) / 7;
 
             float xSpacing = 200f;
             float ySpacing = 200f;
@@ -132,7 +95,7 @@ public class LEVELSELECTOR : MonoBehaviour
                 HapticFeedback.Trigger();
             });
         }
-        for (int i = levelUsed + 1; i <= 40; i++)
+        for (int i = levelUsed + 1; i <= 100; i++)
         {
             GameObject button = Instantiate(grayedOutLevelPrefab);
             button.transform.SetParent(transform, false);
@@ -141,8 +104,8 @@ public class LEVELSELECTOR : MonoBehaviour
             textComponent.text = i.ToString();
             RectTransform uiRect = button.GetComponent<RectTransform>();
 
-            int column = (i - 1) % 6;
-            int row = (i - 1) / 6;
+            int column = (i - 1) % 7;
+            int row = (i - 1) / 7;
 
             float xSpacing = 200f;
             float ySpacing = 200f;

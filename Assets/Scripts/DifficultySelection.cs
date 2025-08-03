@@ -11,6 +11,7 @@ public class DifficultySelection : MonoBehaviour
     public GameObject backgroundWithoutTitle;
     public GameManager gameManager;
     public LEVELSELECTOR levelSelector;
+    public GameObject toggleObject;
 
     public float difficultySetting = 1;
     private void Start()
@@ -54,6 +55,7 @@ public class DifficultySelection : MonoBehaviour
         difficultyButtons.SetActive(false);
         backgroundWithoutTitle.SetActive(true);
         backgroundWithTitle.SetActive(false);
+        toggleObject.SetActive(false);
     }
 
     void Update()
@@ -71,6 +73,7 @@ public class DifficultySelection : MonoBehaviour
         difficultyButtons.SetActive(true);
         backgroundWithoutTitle.SetActive(false);
         backgroundWithTitle.SetActive(true);
+        toggleObject.SetActive(true);
     }
 
     IEnumerator Destroy()

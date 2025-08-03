@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 468457508756741674}
   - component: {fileID: 3795934121699799614}
   - component: {fileID: 9058743505223574048}
+  - component: {fileID: -5701284165758361994}
   - component: {fileID: 454532911703063899}
   - component: {fileID: -190908014605643572}
   - component: {fileID: 6826442595883586551}
@@ -161,6 +162,22 @@ MonoBehaviour:
   bombBonusPrefab: {fileID: 7334109573058389499, guid: 8cd0f3b924d424b918b7937f0cd2436a, type: 3}
   electricBonusPrefab: {fileID: 6396175043836984719, guid: 3f833d55092dc4149a27df072f188fa0, type: 3}
   dayNightReference: 0
+  isVowel: 0
+--- !u!114 &-5701284165758361994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6508559800894195168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e2da42c576fd4a1b8b8a94f07d6fde3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeUnderRay: 0
+  isUnderRay: 0
+  requiredTime: 7
 --- !u!61 &454532911703063899
 BoxCollider2D:
   m_ObjectHideFlags: 0

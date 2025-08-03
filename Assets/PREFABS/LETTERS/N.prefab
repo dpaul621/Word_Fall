@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1534328326204099911}
   - component: {fileID: 6378787584422532874}
   - component: {fileID: 4800852307639539647}
+  - component: {fileID: -7242109552640324121}
   - component: {fileID: -1528514736965493025}
   - component: {fileID: 4962503328648671741}
   m_Layer: 0
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -123293463
-  m_SortingLayer: 3
+  m_SortingLayer: 7
   m_SortingOrder: 1
   m_Sprite: {fileID: -847089248, guid: b73e6cc5cc999439d82df413eced04a6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -159,6 +160,23 @@ MonoBehaviour:
   scoreAddedImage: {fileID: 0}
   bombBonusPrefab: {fileID: 7334109573058389499, guid: 8cd0f3b924d424b918b7937f0cd2436a, type: 3}
   electricBonusPrefab: {fileID: 6396175043836984719, guid: 3f833d55092dc4149a27df072f188fa0, type: 3}
+  dayNightReference: 0
+  isVowel: 0
+--- !u!114 &-7242109552640324121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3572177218115478832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e2da42c576fd4a1b8b8a94f07d6fde3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeUnderRay: 0
+  isUnderRay: 0
+  requiredTime: 7
 --- !u!61 &-1528514736965493025
 BoxCollider2D:
   m_ObjectHideFlags: 0
