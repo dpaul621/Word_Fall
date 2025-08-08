@@ -1,8 +1,18 @@
 public enum SFXType
 {
-    SmallExplosionPop,
-    LevelEndVictory,
-    WrongWord,
+    largeExplosion,
+    smallExplosion,
+    bossAppears,
+    bossStomps,
+    buttonClick,
+    letterSelect,
+    letterDeselect,
+    levelComplete,
+    levelFailed,
+    incorrectSubmission,
+    correctSubmission,
+    electricExplosion,
+    bossPicksUpFoot,
 
 }
 

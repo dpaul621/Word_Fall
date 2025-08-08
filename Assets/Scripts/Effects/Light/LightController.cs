@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 public class LightController : MonoBehaviour
 {
     public float dayNightReference = 0;
-    public float totalLevels = 40;
+    public float totalLevels = 100;
     public Light2D globalLight;
     //sun start location
     public GameObject sunObject;
@@ -34,8 +34,8 @@ public class LightController : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            float progress = (float)GameManager.Instance.GMLevel / totalLevels;
-            float chunkProgress = (progress % 0.25f) / 0.25f;
+            float progress = (float)GameManager.Instance.levelPercentage;
+            float chunkProgress = (progress % 0.20f) / 0.20f;
             dayNightReference = chunkProgress;
         }
         else

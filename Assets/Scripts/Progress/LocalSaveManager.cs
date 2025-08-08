@@ -23,10 +23,37 @@ public static class LocalSaveManager
         };
     }
 
-    public static void Save(PlayerProgress progress)
+    public static void Save(PlayerProgress newProgress)
     {
-        string json = JsonUtility.ToJson(progress);
-        File.WriteAllText(SaveFilePath, json);
+        PlayerProgress existingProgress = Load();
+
+        // Only update if new progress is higher for each difficulty
+        bool shouldSave = false;
+
+        if (newProgress.levelEasy > existingProgress.levelEasy)
+        {
+            existingProgress.levelEasy = newProgress.levelEasy;
+            shouldSave = true;
+        }
+
+        if (newProgress.levelMedium > existingProgress.levelMedium)
+        {
+            existingProgress.levelMedium = newProgress.levelMedium;
+            shouldSave = true;
+        }
+
+        if (newProgress.levelHard > existingProgress.levelHard)
+        {
+            existingProgress.levelHard = newProgress.levelHard;
+            shouldSave = true;
+        }
+
+        // Save only if there were any changes
+        if (shouldSave)
+        {
+            string json = JsonUtility.ToJson(existingProgress);
+            File.WriteAllText(SaveFilePath, json);
+        }
     }
 
     public static bool HasSaveFile()

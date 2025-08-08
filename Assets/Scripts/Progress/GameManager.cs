@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public int Difficulty = 1;
     public int GMLevel;
-    public int MaxLevel = 40;
+    public int MaxLevel = 100;
     public float levelPercentage;
     public PlayerProgress playerProgress; 
     private void Awake()
@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
         levelPercentage = GMLevel / MaxLevel;
         if (Instance == null)
         {
+            Debug.Log($"DDOL on {name}. IsRoot={(transform.parent == null)}", this);
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }

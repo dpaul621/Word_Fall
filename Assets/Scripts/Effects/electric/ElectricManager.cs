@@ -16,6 +16,7 @@ public class ElectricManager : MonoBehaviour
         {
             if (effect.GetComponent<ElectricEffect>().isDead)
             {
+                
                 isChainDestructionTriggered = true;
             }
         }
@@ -30,12 +31,9 @@ public class ElectricManager : MonoBehaviour
     void TriggerChainDestruction()
     {
         GameObject[] electricEffects = GameObject.FindGameObjectsWithTag("ElectricEffect");
-        foreach (GameObject effect in electricEffects)
-        {
-
-        }
         for(int i = 0; i < electricEffects.Length; i++)
         {
+            
             StartCoroutine(DelayedDestructionElectric(delay * i, electricEffects[i]));
         }
     }
@@ -45,11 +43,11 @@ public class ElectricManager : MonoBehaviour
         yield return new WaitForSeconds(delayTime);
         if (effectLetter == null)
         {
-
             yield break; // Exit the coroutine if the effect letter is null
         }
         else
         {
+            
             effectLetter.GetComponent<ElectricEffect>().TriggerElectricEffect();
         }
 

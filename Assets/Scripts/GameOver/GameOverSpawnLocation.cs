@@ -84,6 +84,7 @@ public class GameOverSpawnLocation : MonoBehaviour
             Destroy(timerForEndGame.gameObject);
         }
         endScenarioText.SetActive(true);
+        AudioManager.Instance.PlaySFX(SFXType.levelFailed, 1f);
         yield return new WaitForSeconds(5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

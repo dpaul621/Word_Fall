@@ -136,7 +136,7 @@ public class Word : MonoBehaviour
                 }
                 else if (letterScript.selected)
                 {
-                    letterScript.animator.SetTrigger("smallDeath");
+                    letterScript.Death();
                     Destroy(letterScript.selectedEffect);
                     letterScript.selected = false;
                 }
@@ -150,14 +150,7 @@ public class Word : MonoBehaviour
                 {
                     if (lettersCLearedByWord == 3)
                     {
-                        /*if (penaltyForShortWord < -0.89)
-                        {
-                            penaltyForShortWord = -0.9f;
-                        }*/
-                        //Debug.Log("Short word cleared, applying penalty: " + penaltyForShortWord);
-                        //bonusPercentage = penaltyForShortWord; 
-                        //multiplyerBonus = lettersCLearedByWord * (1 + bonusPercentage);
-                        bonusPercentage = 0f; // 10% penalty
+                        bonusPercentage = 0f;
                         Debug.Log("Short word cleared, applying penalty: " + bonusPercentage);
                         lettersCleared += lettersCLearedByWord;
                     }
@@ -212,7 +205,11 @@ public class Word : MonoBehaviour
     {
         if (lettersCleared >= amountOfLettersToAdvance && !isLevelComplete)
         {
-            //deactive letter spawn
+            StompGuy stompGuy = FindObjectOfType<StompGuy>();
+            if (stompGuy != null)
+            {
+                stompGuy.keepStomping = false;
+            }
             LetterSpawnScript letterSpawnScript = FindObjectOfType<LetterSpawnScript>();
             if (letterSpawnScript != null)
             {
@@ -220,7 +217,6 @@ public class Word : MonoBehaviour
             }
             isLevelComplete = true;
             StartCoroutine(LoadNextScene());
-            Debug.LogWarning("GameManager instance not found. Cannot increase level.");
         }
     }
     private IEnumerator AnimateFill(float targetFill)
@@ -246,6 +242,7 @@ public class Word : MonoBehaviour
         {
             Debug.Log("You have completed all levels! Game Over.");
             VictoryImage.SetActive(true);
+            AudioManager.Instance.PlaySFX(SFXType.levelComplete, 1f);
             yield return new WaitForSeconds(10f);
         }
         else
@@ -260,7 +257,7 @@ public class Word : MonoBehaviour
     }
     void SaveProgress()
     {
-        int levelInt = GameManager.Instance.GMLevel + 1;
+        int levelInt = GameManager.Instance.GMLevel;
         GameManager.Instance.SetLevelForCurrentDifficulty(levelInt);
     }
 
@@ -278,7 +275,7 @@ public class Word : MonoBehaviour
                 Letter letterScript = letter.GetComponent<Letter>();
                 if (letterScript != null && letterScript.animator != null)
                 {
-                    letterScript.animator.SetTrigger("smallDeath");
+                    letterScript.Death();
                     Destroy(letterScript.ElectricEffect);
                 }
             }

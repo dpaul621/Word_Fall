@@ -27,11 +27,13 @@ public class EnterWord : MonoBehaviour
 
         if (WordChecker.IsValid(word))
         {
+            AudioManager.Instance.PlaySFX(SFXType.correctSubmission, 1f); 
             ClearInputField();
             ClearWordScript();
         }
         else
         {
+            AudioManager.Instance.PlaySFX(SFXType.incorrectSubmission, 1f);
             Debug.Log($"❌ Invalid word: {word}");
             wordScript.RemoveAllLetters();
             ClearInputField();

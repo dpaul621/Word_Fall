@@ -6,6 +6,6 @@ public class Bomb : MonoBehaviour
 {
     void Start()
     {
-        AudioManager.Instance.PlaySFX(SFXType.SmallExplosionPop, 0.3f); 
+        AudioManager.Instance.PlaySFX(SFXType.largeExplosion, 0.7f); 
     }
 }

@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/LevelSelector 1.unity
     guid: 7c755251fb07e444e9840b010a94171b
   - enabled: 1
-    path: Assets/Scenes/Master.unity
-    guid: 9e85a6316a41f4cbbb25d0c2304f0e2c
+    path: Assets/Scenes/screen fix test.unity
+    guid: bf2c592f40b2a4c72bd620ea2e9483ad
   m_configObjects: {}

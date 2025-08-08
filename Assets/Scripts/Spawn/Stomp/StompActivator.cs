@@ -14,17 +14,18 @@ public class StompActivator : MonoBehaviour
 
     void Awake()
     {
-       StartCoroutine(StompActivatorMethod());
+        StartCoroutine(StompActivatorMethod());
     } 
     void Start()
     {
-
+        
     }
     IEnumerator StompActivatorMethod()
     {
         yield return new WaitForEndOfFrame(); // Ensure the game is fully initialized before checking level percentage
         if (GameManager.Instance.levelPercentage == 0.2f || GameManager.Instance.levelPercentage == 0.4f || GameManager.Instance.levelPercentage == 0.6f || GameManager.Instance.levelPercentage == 0.8f || GameManager.Instance.levelPercentage == 1.0f)
         {
+            AudioManager.Instance.PlaySFX(SFXType.bossAppears, 1f); 
             Debug.Log("Activating stomp guy and deactivating borders for level: " + GameManager.Instance.levelPercentage);
             Time.timeScale = 0f; // Pause the game
             spawnPoint.transform.position = new Vector2(0, 3.77f);

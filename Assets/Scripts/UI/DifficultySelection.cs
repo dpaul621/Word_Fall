@@ -7,10 +7,9 @@ public class DifficultySelection : MonoBehaviour
 {
     public GameObject levelButtons;
     public GameObject difficultyButtons;
-    public GameObject backgroundWithTitle;
-    public GameObject backgroundWithoutTitle;
     public GameManager gameManager;
     public LEVELSELECTOR levelSelector;
+    public GameObject title;
     public GameObject toggleObject;
 
     public float difficultySetting = 1;
@@ -51,10 +50,9 @@ public class DifficultySelection : MonoBehaviour
     }
     void LevelsAppear()
     {
+        title.SetActive(false);
         levelButtons.SetActive(true);
         difficultyButtons.SetActive(false);
-        backgroundWithoutTitle.SetActive(true);
-        backgroundWithTitle.SetActive(false);
         toggleObject.SetActive(false);
     }
 
@@ -68,11 +66,10 @@ public class DifficultySelection : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        title.SetActive(true);
         HapticFeedback.Trigger();
         levelButtons.SetActive(false);
         difficultyButtons.SetActive(true);
-        backgroundWithoutTitle.SetActive(false);
-        backgroundWithTitle.SetActive(true);
         toggleObject.SetActive(true);
     }
 
@@ -81,7 +78,5 @@ public class DifficultySelection : MonoBehaviour
         yield return new WaitForEndOfFrame();
         levelButtons.SetActive(false);
         difficultyButtons.SetActive(true);
-        backgroundWithoutTitle.SetActive(false);
-        backgroundWithTitle.SetActive(true);
     }
 }

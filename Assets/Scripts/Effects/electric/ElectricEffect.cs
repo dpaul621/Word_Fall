@@ -11,18 +11,6 @@ public class ElectricEffect : MonoBehaviour
     {
         parentLetter = transform.parent.gameObject;
     }
-    //find all game objects with the tag "ElectricEffect" 
-    void Update()
-    {
-        //find all game objects with the tag "ElectricEffect"
-        /*GameObject[] electricEffects = GameObject.FindGameObjectsWithTag("ElectricEffect");
-        foreach(GameObject effect in electricEffects)
-        {
-            //if the effect is not the parent letter, destroy it
-            parentLetter.GetComponent<Letter>().TriggerElectricEffect();
-        }*/
-    }
-
     public void TriggerElectricEffect()
     {
         if (parentLetter != null)
@@ -30,6 +18,7 @@ public class ElectricEffect : MonoBehaviour
             Letter letterScript = parentLetter.GetComponent<Letter>();
             if (letterScript != null)
             {
+                
                 letterScript.TriggerElectricEffect();
             }
             else
@@ -41,6 +30,10 @@ public class ElectricEffect : MonoBehaviour
         {
             Debug.LogWarning("Parent letter is null, cannot trigger electric effect.");
         }
+    }
+    public void ElectricSound()
+    {
+        AudioManager.Instance.PlaySFX(SFXType.electricExplosion, 1f);
     }
 
     public void TurnOffParentSpriteRenderer()
@@ -83,6 +76,7 @@ public class ElectricEffect : MonoBehaviour
     
     public void ElectricBonusScore()
     {
+        ElectricSound();
         GameObject bonus = Resources.Load<GameObject>("ElectricBonusScore");
         Instantiate(bonus, transform.position, Quaternion.identity);
     }

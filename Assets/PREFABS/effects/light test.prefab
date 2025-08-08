@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8255160151705258377}
   - component: {fileID: 4328913069489177602}
-  - component: {fileID: 2585247139744749029}
   m_Layer: 0
   m_Name: light test
   m_TagString: Untagged
@@ -89,16 +88,3 @@ MonoBehaviour:
   - {x: -0.04435325, y: 0.43408334, z: 0.000000044703484}
   - {x: -0.40457326, y: 0.40882826, z: 0}
   - {x: -0.42913187, y: -0.07185578, z: 0.000000044703484}
---- !u!114 &2585247139744749029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4971362494903623463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8d0a67fbf32142729711a8d55b4ec9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dayNightReference: 0
