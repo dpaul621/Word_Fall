@@ -13,6 +13,15 @@ public enum SFXType
     correctSubmission,
     electricExplosion,
     bossPicksUpFoot,
-
+    selectSound1,
+    selectSound2,
+    selectSound3,
+    selectSound4,
+    selectSound5,
+    selectSound6,
+    selectSound7,
+    selectSound8,
+    fallingBossSound,
+    letterSpawn,
 }
 

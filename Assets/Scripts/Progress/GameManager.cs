@@ -7,12 +7,15 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
     public int Difficulty = 1;
     public int GMLevel;
-    public int MaxLevel = 100;
+    public int MaxLevel = 200;
     public float levelPercentage;
-    public PlayerProgress playerProgress; 
+    public PlayerProgress playerProgress;
+    private OneDifficultyModeProgress oneModeProgress;
+    public bool oneDifficultyMode = false;
     private void Awake()
     {
         levelPercentage = GMLevel / MaxLevel;
+
         if (Instance == null)
         {
             Debug.Log($"DDOL on {name}. IsRoot={(transform.parent == null)}", this);
@@ -51,5 +54,19 @@ public class GameManager : MonoBehaviour
 
         LocalSaveManager.Save(playerProgress);
         Debug.Log($"Set level for difficulty {Difficulty}: {level}");
+    }
+    
+    public int GetOneDifficultyModeLevel()
+    {
+        oneModeProgress = OneModeSaveManager.Load();
+        return oneModeProgress.oneDifficultyModeLevel;
+    }
+
+    public void SetOneDifficultyModeLevel(int level)
+    {
+        if (oneModeProgress == null) oneModeProgress = OneModeSaveManager.Load();
+        oneModeProgress.oneDifficultyModeLevel = level;
+        OneModeSaveManager.Save(oneModeProgress);
+        Debug.Log($"Set oneDifficultyModeLevel: {level}");
     }
 }

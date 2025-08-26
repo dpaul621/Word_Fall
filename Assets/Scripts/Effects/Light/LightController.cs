@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 public class LightController : MonoBehaviour
 {
     public float dayNightReference = 0;
-    public float totalLevels = 100;
+    float totalLevels;
     public Light2D globalLight;
     //sun start location
     public GameObject sunObject;
@@ -23,6 +23,7 @@ public class LightController : MonoBehaviour
 
     void Start()
     {
+        totalLevels = GameManager.Instance.MaxLevel;
         CalculateDayNightReference();
         DecreaseGlobalLight();
         SkyChange();
@@ -34,8 +35,20 @@ public class LightController : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            float progress = (float)GameManager.Instance.levelPercentage;
-            float chunkProgress = (progress % 0.20f) / 0.20f;
+            /*Debug.Log("Calculating day/night reference based on level percentage." + GameManager.Instance.levelPercentage);
+            Debug.Log("LEVEL " + GameManager.Instance.GMLevel + "MAX LEVEL " + GameManager.Instance.MaxLevel + "one over the other" + GameManager.Instance.GMLevel / GameManager.Instance.MaxLevel);
+            float progress = (float)GameManager.Instance.GMLevel / GameManager.Instance.MaxLevel;
+            Debug.Log("progress" + progress);
+            float chunkProgress = Mathf.Repeat(progress, 0.2f) / 0.2f;
+            Debug.Log("chunkProgress" + chunkProgress);
+            if (Mathf.Approximately(chunkProgress, 0f) || chunkProgress < 1e-4f)
+                chunkProgress = 1f;
+
+            dayNightReference = chunkProgress;
+            Debug.Log("dayNightReference: " + dayNightReference);*/
+            int subIndex = (GameManager.Instance.GMLevel - 1) % 20; // 0..19  ← this (%) is integer modulo
+            float chunkProgress = (subIndex + 1) / 20f;             // 0.05..1.0 (level 20 maps to 1.0)
+
             dayNightReference = chunkProgress;
         }
         else

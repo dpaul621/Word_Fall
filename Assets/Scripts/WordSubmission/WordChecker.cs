@@ -22,6 +22,11 @@ public class WordChecker : MonoBehaviour
             levelOfDifficulty = gameManagerScript.Difficulty;
         }
         StartCoroutine(LoadWordList());
+    }
+
+    private IEnumerator LoadWordList()
+    {
+        yield return new WaitForEndOfFrame(); 
         if(GameManager.Instance.Difficulty == 1)
         {
             numberOfLetters = 3; // Easy
@@ -34,16 +39,19 @@ public class WordChecker : MonoBehaviour
         {
             numberOfLetters = 5; // Hard
         }
+        else if(GameManager.Instance.Difficulty == 4)
+        {
+            numberOfLetters = 6; // Hard
+        }
+        else if(GameManager.Instance.Difficulty == 5)
+        {
+            numberOfLetters = 7; // Hard
+        }
         else
         {
             Debug.LogWarning("Invalid level of difficulty. Defaulting to Easy.");
             numberOfLetters = 3;
         }
-    }
-
-    private IEnumerator LoadWordList()
-    {
-        yield return new WaitForEndOfFrame(); 
         validWords = new HashSet<string>();
         TextAsset wordFile = Resources.Load<TextAsset>("my_scrabble_wordlist"); 
         if (wordFile != null)

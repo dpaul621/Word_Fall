@@ -14,14 +14,19 @@ public class GameOverSpawnLocation : MonoBehaviour
     public GameObject endScenarioText;
     float requiredTime = 10f;
     public float timer = 0f;
+    bool victory = false;
+    public bool gameOver = false;
+    Word word;
 
     void Update()
     {
         RayCastToEndScenario();
 
+        victory = word.isLevelComplete;
     }
     void Start()
     {
+        word = FindObjectOfType<Word>();
         if (letterSpawnScript == null)
         {
             letterSpawnScript = FindObjectOfType<LetterSpawnScript>();
@@ -83,10 +88,29 @@ public class GameOverSpawnLocation : MonoBehaviour
         {
             Destroy(timerForEndGame.gameObject);
         }
-        endScenarioText.SetActive(true);
-        AudioManager.Instance.PlaySFX(SFXType.levelFailed, 1f);
-        yield return new WaitForSeconds(5f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //find stomp guys keep stomping and make it false
+        if (!victory && !gameOver)
+        {
+            gameOver = true;
+            StompGuy stompGuy = FindObjectOfType<StompGuy>();
+            if (stompGuy != null)
+            {
+                stompGuy.keepStomping = false;
+            }
+            endScenarioText.SetActive(true);
+            AudioManager.Instance.PlaySFX(SFXType.levelFailed, 1f);
+            //destroy all game over locations except for this one
+            GameOverSpawnLocation[] allGameOverLocations = FindObjectsOfType<GameOverSpawnLocation>();
+            foreach (GameOverSpawnLocation location in allGameOverLocations)
+            {
+                if (location != this)
+                {
+                    Destroy(location.gameObject);
+                }
+            }
+            yield return new WaitForSeconds(5f);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 }
 

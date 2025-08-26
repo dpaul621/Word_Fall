@@ -29,7 +29,7 @@ public class CloudSpawn : MonoBehaviour
             GameObject cloud = Instantiate(prefab, position, Quaternion.identity);
             cloud.transform.SetParent(transform); // or null if you prefer world space
 
-            Debug.Log($"Cloud Spawned at y={y}");
+            //Debug.Log($"Cloud Spawned at y={y}");
             yield return new WaitForSeconds(spawnInterval);
         }
     }

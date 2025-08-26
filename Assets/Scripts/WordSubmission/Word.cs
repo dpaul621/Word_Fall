@@ -22,8 +22,6 @@ public class Word : MonoBehaviour
     public float bonusPercentage = 0;
     public ScoreAddedImage scoreAddedImage;
     public float explosionAtEndSpeed = 0.1f; 
-
-    //private PlayerProgressManager progressManager;
     public bool isLevelComplete = false;
     public float penaltyForShortWord = -0.1f; // -10% penalty
 
@@ -51,29 +49,42 @@ public class Word : MonoBehaviour
             Debug.LogWarning("Level Tracker Image is not assigned.");
         }
     }
-    public void AddLetter(GameObject letter)
+public void AddLetter(GameObject letter)
+{
+    if (letter != null && !letterObjects.Contains(letter))
     {
-        if (letter != null && !letterObjects.Contains(letter))
+        // Decide which sound to play based on how many letters are already in the list
+        int currentCount = letterObjects.Count; // 0-based before adding
+
+        // Clamp to available sounds (1–8)
+        int soundIndex = Mathf.Clamp(currentCount + 1, 1, 6);
+
+        // Convert to enum name dynamically (selectSound1..selectSound8)
+        SFXType soundType = (SFXType)System.Enum.Parse(typeof(SFXType), $"selectSound{soundIndex}");
+
+        // Play the sound
+        AudioManager.Instance.PlaySFX(soundType);
+
+        // Finally, add the letter
+        letterObjects.Add(letter);
+    }
+    else
+    {
+        // Deselect if already in list
+        if (letter != null && letterObjects.IndexOf(letter) >= 0)
         {
-            letterObjects.Add(letter);
+            letter.GetComponent<SpriteRenderer>().color = Color.white;
+            Letter letterScript = letter.GetComponent<Letter>();
+            letterScript.inputFieldText.text = letterScript.inputFieldText.text.Remove(letterObjects.IndexOf(letter), 1);
+            letterScript.selected = false;
+            letterObjects.Remove(letter);
         }
         else
         {
-            //access the letter gamobjects componoent Letter, set the color to white, and remove that character from the list of characters in the input field. i will need to access the iinputfieldtexts list of characters, the index of that will corelate with the index from the list of letter gameobjects. use this index to delete the character
-            if (letter != null && letterObjects.IndexOf(letter) >= 0)
-            {
-                letter.GetComponent<SpriteRenderer>().color = Color.white;
-                Letter letterScript = letter.GetComponent<Letter>();
-                letterScript.inputFieldText.text = letterScript.inputFieldText.text.Remove(letterObjects.IndexOf(letter), 1);
-                letterScript.selected = false;
-                letterObjects.Remove(letter);
-            }
-            else
-            {
-                Debug.LogWarning("Attempted to add a null letter.");
-            }
+            Debug.LogWarning("Attempted to add a null letter.");
         }
     }
+}
     public void RemoveLastLetter()
     {
         if (letterObjects.Count > 0)
@@ -238,11 +249,12 @@ public class Word : MonoBehaviour
     IEnumerator LoadNextScene()
     {
         StartCoroutine(TriggerSmallDeathsCoroutine());
-        if (GameManager.Instance.GMLevel >= 100)
+        yield return new WaitForSeconds(0.75f);
+        AudioManager.Instance.PlaySFX(SFXType.levelComplete, 1f);
+        if (GameManager.Instance.GMLevel >= GameManager.Instance.MaxLevel)
         {
             Debug.Log("You have completed all levels! Game Over.");
             VictoryImage.SetActive(true);
-            AudioManager.Instance.PlaySFX(SFXType.levelComplete, 1f);
             yield return new WaitForSeconds(10f);
         }
         else
@@ -250,15 +262,23 @@ public class Word : MonoBehaviour
             Debug.Log("level up! Loading next scene...");
             LevelCompleteImage.SetActive(true);
             GameManager.Instance.GMLevel++;
-            yield return new WaitForSeconds(5f);
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            yield return new WaitForSeconds(4f);
+            SceneManager.LoadScene(1);
             SaveProgress();
         }
     }
     void SaveProgress()
     {
         int levelInt = GameManager.Instance.GMLevel;
-        GameManager.Instance.SetLevelForCurrentDifficulty(levelInt);
+        if (GameManager.Instance.oneDifficultyMode)
+        {
+            GameManager.Instance.SetOneDifficultyModeLevel(levelInt);
+        }
+        else
+        {
+            GameManager.Instance.SetLevelForCurrentDifficulty(levelInt);
+        }
+
     }
 
 

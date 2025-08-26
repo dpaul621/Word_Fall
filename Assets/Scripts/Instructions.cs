@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Instructions : MonoBehaviour
 {
-    // this will be used only when gminstance level = 1
-    // when it is active the game will be paused.
-    //when you hit the continue button, it will go through the lsit of instructions one at a time, activating one and deactiviting the current, until we are on the last list item. then it will stop pausing hte game and deactivate the entire deal.
     public GameObject instructionsPanel;
     public List<GameObject> instructionsList;
     public int currentInstructionIndex = 0;
@@ -14,16 +11,13 @@ public class Instructions : MonoBehaviour
     public GameObject level1Instructions;
     public GameObject bombInstructions;
     public GameObject electricInstructions;
+    public GameObject level41Instructions;
+    public GameObject level81Instructions;
+    public GameObject level121Instructions;
+    public GameObject level161Instructions;
 
     void Start()
     {
-        if (GameManager.Instance.GMLevel == 1)
-        {
-            instructionsPanel.SetActive(true);
-            level1Instructions.SetActive(true);
-            StartInstructions(level1Instructions);
-            Debug.Log("Instructions started for level 1.");
-        }
         if (GameManager.Instance.GMLevel == 11)
         {
             bombInstructions.SetActive(true);
@@ -31,12 +25,40 @@ public class Instructions : MonoBehaviour
             instructionsPanel.SetActive(true);
             Debug.Log("Instructions started for bomb level.");
         }
-        if (GameManager.Instance.GMLevel == 30)
+        if (GameManager.Instance.GMLevel == 16)
         {
             electricInstructions.SetActive(true);
             StartInstructions(electricInstructions);
             instructionsPanel.SetActive(true);
             Debug.Log("Instructions started for electric level.");
+        }
+        if (GameManager.Instance.GMLevel == 41)
+        {
+            instructionsPanel.SetActive(true);
+            level41Instructions.SetActive(true);
+            StartInstructions(level41Instructions);
+            Debug.Log("Instructions started for level 41.");
+        }
+        if (GameManager.Instance.GMLevel == 81)
+        {
+            instructionsPanel.SetActive(true);
+            level81Instructions.SetActive(true);
+            StartInstructions(level81Instructions);
+            Debug.Log("Instructions started for level 81.");
+        }
+        if (GameManager.Instance.GMLevel == 121)
+        {
+            instructionsPanel.SetActive(true);
+            level121Instructions.SetActive(true);
+            StartInstructions(level121Instructions);
+            Debug.Log("Instructions started for level 121.");
+        }
+        if (GameManager.Instance.GMLevel == 161)
+        {
+            instructionsPanel.SetActive(true);
+            level161Instructions.SetActive(true);
+            StartInstructions(level161Instructions);
+            Debug.Log("Instructions started for level 161.");
         }
     }
 
@@ -62,6 +84,7 @@ public class Instructions : MonoBehaviour
     public void ContinueInstructions()
     {
         HapticFeedback.Trigger();
+        AudioManager.Instance.PlaySFX(SFXType.buttonClick, 1f);
         //when clicked deactivate curent instructions (list item currentInstructionIndex) and activate the next on the list
         if (currentInstructionIndex < instructionsList.Count)
         {
@@ -80,6 +103,5 @@ public class Instructions : MonoBehaviour
                 Time.timeScale = 1f;
             }
         }
-        
     }
 }

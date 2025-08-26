@@ -144,7 +144,7 @@ public class PreGameWordSpawn : MonoBehaviour
         }
         HashSet<int> excludedLevels = new HashSet<int>
         {
-            11, 31, 51, 71, 91,
+            1, 11, 31, 51, 71, 91,
             16, 36, 56, 76, 96,
             17, 37, 57, 77, 97,
             18, 38, 58, 78, 98

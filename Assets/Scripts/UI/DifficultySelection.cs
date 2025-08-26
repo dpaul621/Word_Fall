@@ -11,6 +11,8 @@ public class DifficultySelection : MonoBehaviour
     public LEVELSELECTOR levelSelector;
     public GameObject title;
     public GameObject toggleObject;
+    public GameObject playButton;
+    public GameObject scroll;
 
     public float difficultySetting = 1;
     private void Start()
@@ -18,19 +20,23 @@ public class DifficultySelection : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
         //levelSelector = FindObjectOfType<LEVELSELECTOR>();
     }
+    public void OnOneDifficultyModeClick()
+    {
+        gameManager.oneDifficultyMode = true;
+        gameManager.MaxLevel = 200;
+        LevelsAppear();
+    }
     public void OnEasyClick()
     {
         difficultySetting = 1;
         gameManager.Difficulty = 1;
         Debug.Log("Difficulty set to Easy");
         LevelsAppear();
-        HapticFeedback.Trigger();
     }
     public void OnMediumClick()
     {
         difficultySetting = 2;
         gameManager.Difficulty = 2;
-        HapticFeedback.Trigger();
         //  Debug.Log("Difficulty set to Medium");
         LevelsAppear();
     }
@@ -38,7 +44,6 @@ public class DifficultySelection : MonoBehaviour
     {
         difficultySetting = 3;
         gameManager.Difficulty = 3;
-        HapticFeedback.Trigger();
         LevelsAppear();
     }
     public void OnExperimentalClick()
@@ -50,15 +55,20 @@ public class DifficultySelection : MonoBehaviour
     }
     void LevelsAppear()
     {
+        scroll.SetActive(true);
         title.SetActive(false);
         levelButtons.SetActive(true);
-        difficultyButtons.SetActive(false);
         toggleObject.SetActive(false);
-    }
-
-    void Update()
-    {
-        //levelSelector = FindObjectOfType<LEVELSELECTOR>();
+        HapticFeedback.Trigger();
+        AudioManager.Instance.PlaySFX(SFXType.buttonClick, 1f);
+        if (GameManager.Instance.oneDifficultyMode)
+        {
+            playButton.SetActive(false);
+        }
+        else
+        {
+            difficultyButtons.SetActive(false);
+        }
     }
     public void LevelsDisappear()
     {
@@ -66,11 +76,20 @@ public class DifficultySelection : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        scroll.SetActive(false);
         title.SetActive(true);
         HapticFeedback.Trigger();
         levelButtons.SetActive(false);
-        difficultyButtons.SetActive(true);
         toggleObject.SetActive(true);
+        AudioManager.Instance.PlaySFX(SFXType.buttonClick, 1f); 
+        if (GameManager.Instance.oneDifficultyMode)
+        {
+            playButton.SetActive(true);
+        }
+        else
+        {
+            difficultyButtons.SetActive(true);
+        }
     }
 
     IEnumerator Destroy()

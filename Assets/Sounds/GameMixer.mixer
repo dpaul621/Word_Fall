@@ -1,5 +1,33 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!244 &-8629947979317951204
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 0e3a56801dbcf441892aa1752d7c84ac
+  m_EffectName: Duck Volume
+  m_MixLevel: 5b84f61bf888c42b48c117470a5c2834
+  m_Parameters:
+  - m_ParameterName: Threshold
+    m_GUID: 52bcde4b196084b7bb83f7c47893b283
+  - m_ParameterName: Ratio
+    m_GUID: 91cd355ddd49f496bbcb6a6c7c3eb3c5
+  - m_ParameterName: Attack Time
+    m_GUID: a993ecf43b3da4ee1bef0efceabedc0d
+  - m_ParameterName: Release Time
+    m_GUID: c1cbb4f31cadd4eea855469ea0f82feb
+  - m_ParameterName: Make-up Gain
+    m_GUID: d938561ede5c3476c940036a170e46ae
+  - m_ParameterName: Knee
+    m_GUID: 1718b4af350b24339aeb82e87adfd08c
+  - m_ParameterName: Sidechain Mix
+    m_GUID: df3a1d1136313473f918a3418ba9b65a
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-8410169663129902201
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -66,6 +94,48 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &-1521117685700500470
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 781d400aff75a4d2685e7708899cd570
+  m_EffectName: SFX Reverb
+  m_MixLevel: bd313bf18ca3340e69974725799e45ff
+  m_Parameters:
+  - m_ParameterName: Dry Level
+    m_GUID: ca23bbf4d6e4a492ca9aecff41589010
+  - m_ParameterName: Room
+    m_GUID: 89d231d363bdc49d5bc0a4d361de18ea
+  - m_ParameterName: Room HF
+    m_GUID: 05d87cf5d7e7c455a9c902e4265d358b
+  - m_ParameterName: Decay Time
+    m_GUID: 0f1841a193ded460a89a45b604ff2f66
+  - m_ParameterName: Decay HF Ratio
+    m_GUID: ae8f54314a01447ffa67276eed3b6083
+  - m_ParameterName: Reflections
+    m_GUID: 5cca8d811d3ea4d7ca0cd06550590cd1
+  - m_ParameterName: Reflect Delay
+    m_GUID: b4645ac5980f44995986e5b65f16da99
+  - m_ParameterName: Reverb
+    m_GUID: 18cd75a2cf94f44b382d51cb7f4538c1
+  - m_ParameterName: Reverb Delay
+    m_GUID: 99c80151b2ac44170a073bd10c8dca32
+  - m_ParameterName: Diffusion
+    m_GUID: ca9d8260ca3fd4528b8bceeb7b7ea83d
+  - m_ParameterName: Density
+    m_GUID: 61dcac2a1b73c4d40b1ae01517bc1e73
+  - m_ParameterName: HF Reference
+    m_GUID: 6e22ee788a5dc4972b6fabd204689bd2
+  - m_ParameterName: Room LF
+    m_GUID: 13451fb18db9b4a96b61a03f3cc15625
+  - m_ParameterName: LF Reference
+    m_GUID: b2b6c5e986ed24f7aaa1e35efb44671e
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!243 &-563338979118160649
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -97,8 +167,8 @@ AudioMixerController:
   m_Snapshots:
   - {fileID: 24500006}
   m_StartSnapshot: {fileID: 24500006}
-  m_SuspendThreshold: -80
-  m_EnableSuspend: 1
+  m_SuspendThreshold: 0
+  m_EnableSuspend: 0
   m_UpdateMode: 0
   m_ExposedParameters: []
   m_AudioMixerGroupViews:
@@ -156,7 +226,7 @@ AudioMixerSnapshotController:
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: 6fbd1adb594b941679baa43fb9ae22a8
   m_FloatValues:
-    b508d0d6ad85a4ffba991daf819493f9: -0.39762527
+    b508d0d6ad85a4ffba991daf819493f9: 0
   m_TransitionOverrides: {}
 --- !u!244 &5203352296640999276
 AudioMixerEffectController:

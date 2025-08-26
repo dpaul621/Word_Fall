@@ -12,7 +12,7 @@ public class LetterSpawnScript : MonoBehaviour
     public int currentTotalLetterCount = 0;
     public List<LetterData> letterDataList;
     public List<float> spawnXValues;
-    public float earlyGameTimer = 8f;
+    float earlyGameTimer = 3f;
     float gameTimer;
     public float lowRangeSpawnInterval = 0.5f;
     public float highRangeSpawnInterval = 2.0f;
@@ -58,36 +58,55 @@ public class LetterSpawnScript : MonoBehaviour
     }
     void Start()
     {
-        _spawnRoutine = StartCoroutine(SpawnLoop());
+        if (TutorialManager.Instance == null)
+        {
+            _spawnRoutine = StartCoroutine(SpawnLoop());
+        }
         level = GameManager.Instance.GMLevel;
         StartCoroutine(NewLevelSetter());
         MakeSixLetterWords();
-        if (GameManager.Instance.GMLevel < 25)
+        if (GameManager.Instance.GMLevel <= 2)
         {
-            earlyGameTimer = 0f; 
+                earlyGameTimer = 8f;
         }
     }
+
+    public void StartSpawnCoroutine()
+    {
+        if (_spawnRoutine == null)
+        {
+            _spawnRoutine = StartCoroutine(SpawnLoop());
+        }
+    }
+
     DifficultySettings GetDifficultySettings(int level)
     {
-        float t = Mathf.Clamp01((level - 1f) / 99f); // Normalized value (0 to 1) across 100 levels
-
-        int subLevel = ((level - 1) % 20) + 1;  // ✅ Valid outside return
-
+        int max = GameManager.Instance.oneDifficultyMode ? 120 : 100;
+        
+        // Calculate how many 40-level blocks we've completed
+        int completedBlocks = (level - 1) / 40;
+        
+        // Calculate the effective level after applying all rollbacks
+        // Each completed block adds 20 levels of progress (40 levels - 20 rollback = net +20)
+        int baseLevel = level - (completedBlocks * 20);
+        
+        // Linear ramp using the remapped level
+        float t = Mathf.Clamp01((baseLevel - 1f) / (max - 1f));
+        
+        // Keep 20-level gating on the real level (1..20, 21..40, ...)
+        int subLevel = ((level - 1) % 20) + 1;
+        
         return new DifficultySettings
         {
-            lowRangeSpawn = Mathf.Lerp(2.9f, 0.5f, t),
-            highRangeSpawn = Mathf.Lerp(3.9f, 1f, t),
+            lowRangeSpawn            = Mathf.Lerp(2.9f, 0.5f, t),
+            highRangeSpawn           = Mathf.Lerp(3.9f, 1f,   t),
             chanceOfAdditionalLetter = Mathf.Lerp(0.015f, 0.6f, t),
-            letterSpeed = Mathf.Lerp(-0.185f, -0.575f, t),
-
+            letterSpeed              = Mathf.Lerp(-0.185f, -0.575f, t),
             chanceOfBomb = (subLevel >= 11 && subLevel <= 15) ? 0.15f :
-                        (subLevel >= 18 && subLevel <= 20) ? 0.2f :
-                        0f,
-
-            chanceOfElectric = (subLevel == 16) ? 0.5f :
-                            (subLevel == 17) ? 0.4f :
-                            (subLevel >= 18) ? 0.35f :
-                            0f
+                        (subLevel >= 18 && subLevel <= 20) ? 0.20f : 0f,
+            chanceOfElectric = (subLevel == 16) ? 0.50f :
+                            (subLevel == 17) ? 0.40f :
+                            (subLevel >= 18) ? 0.35f : 0f
         };
     }
     void MakeSixLetterWords()
@@ -113,7 +132,7 @@ public class LetterSpawnScript : MonoBehaviour
     {
         gameTimer += Time.deltaTime;
         int tier = GetLetterDifficultyTier(currentTotalLetterCount);
-        if (tier != currentLetterTier && gameTimer >= earlyGameTimer && GameManager.Instance.GMLevel <= 40)
+        if (tier != currentLetterTier && gameTimer >= earlyGameTimer && GameManager.Instance.GMLevel <= 60)
         {
             ApplyTierDifficulty(tier);
             currentLetterTier = tier;
@@ -148,26 +167,26 @@ public class LetterSpawnScript : MonoBehaviour
         switch (tier)
         {
             case 0: // Extreme hard
-                currentLowRangeSpawnInterval = Mathf.Max(lowRangeSpawnInterval * 0.35f, 0.25f);
-                currentHighRangeSpawnInterval = Mathf.Max(highRangeSpawnInterval * 0.35f, 0.35f);
-                currentChanceOfAdditionalLetter = Mathf.Min(chanceOfAdditionalLetter * 2.5f, 0.95f);
-                currentLetterMovementSpeed = letterMovementSpeed * 1.75f;
+                currentLowRangeSpawnInterval = 0.5f;
+                currentHighRangeSpawnInterval = 0.5f;
+                currentChanceOfAdditionalLetter = Mathf.Min(chanceOfAdditionalLetter * 4f, 2.5f);
+                currentLetterMovementSpeed = letterMovementSpeed * 1.8f;
                 Debug.Log("Difficulty TIER 0 applied (extreme hard)");
                 break;
 
             case 1: // Extra hard
-                currentLowRangeSpawnInterval = Mathf.Max(lowRangeSpawnInterval * 0.55f, 0.3f);
-                currentHighRangeSpawnInterval = Mathf.Max(highRangeSpawnInterval * 0.55f, 0.5f);
-                currentChanceOfAdditionalLetter = Mathf.Min(chanceOfAdditionalLetter * 2.0f, 0.9f);
+                currentLowRangeSpawnInterval = 0.5f;
+                currentHighRangeSpawnInterval = 0.5f;
+                currentChanceOfAdditionalLetter = Mathf.Min(chanceOfAdditionalLetter * 3.5f, 0.95f);
                 currentLetterMovementSpeed = letterMovementSpeed * 1.6f;
                 Debug.Log("Difficulty TIER 1 applied (extra hard)");
                 break;
 
             case 2: // Hard
-                currentLowRangeSpawnInterval = Mathf.Max(lowRangeSpawnInterval * 0.7f, 0.4f);
-                currentHighRangeSpawnInterval = Mathf.Max(highRangeSpawnInterval * 0.7f, 0.7f);
-                currentChanceOfAdditionalLetter = Mathf.Min(chanceOfAdditionalLetter * 1.5f, 0.8f);
-                currentLetterMovementSpeed = letterMovementSpeed * 1.35f;
+                currentLowRangeSpawnInterval = Mathf.Max(lowRangeSpawnInterval * 0.6f, 0.35f);
+                currentHighRangeSpawnInterval = Mathf.Max(highRangeSpawnInterval * 0.6f, 0.6f);
+                currentChanceOfAdditionalLetter = Mathf.Min(chanceOfAdditionalLetter * 3f, 0.85f);
+                currentLetterMovementSpeed = letterMovementSpeed * 1.4f;
                 Debug.Log("Difficulty TIER 2 applied (hard)");
                 break;
 
@@ -283,6 +302,7 @@ public class LetterSpawnScript : MonoBehaviour
         }
 
         GameObject newLetter = Instantiate(selectedLetter.prefab, new Vector3(randomXValue, transform.position.y, 0), Quaternion.identity);
+        AudioManager.Instance.PlaySFX(SFXType.letterSpawn, 0.1f);
         Letter letterComponent = newLetter.GetComponent<Letter>();
         letterComponent.spawnXLocation = randomXValue;
         letterComponent.letterIsBomb = Random.Range(0f, 1f) < chancesOfABomb;
@@ -315,6 +335,7 @@ public class LetterSpawnScript : MonoBehaviour
             float secondX = secondAvailableX[Random.Range(0, secondAvailableX.Count)];
             LetterData secondLetter = GetWeightedRandomLetter();
             GameObject secondObj = Instantiate(secondLetter.prefab, new Vector3(secondX, transform.position.y, 0), Quaternion.identity);
+            AudioManager.Instance.PlaySFX(SFXType.letterSpawn, 0.1f);
             Letter secondLetterComponent = secondObj.GetComponent<Letter>();
             secondLetterComponent.spawnXLocation = secondX;
             secondLetterComponent.letterIsBomb = Random.Range(0f, 1f) < chancesOfABomb;
@@ -340,7 +361,7 @@ public class LetterSpawnScript : MonoBehaviour
                 selectedLetter = GetWeightedRandomConsonant();
 
             GameObject newLetter = Instantiate(selectedLetter.prefab, new Vector3(shuffledX[i], transform.position.y, 0), Quaternion.identity);
-
+            AudioManager.Instance.PlaySFX(SFXType.letterSpawn, 0.1f);
             Letter letterComponent = newLetter.GetComponent<Letter>();
             letterComponent.spawnXLocation = shuffledX[i];
             letterComponent.letterIsBomb = Random.Range(0f, 1f) < chancesOfABomb;

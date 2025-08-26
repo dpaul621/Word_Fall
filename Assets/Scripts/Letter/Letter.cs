@@ -35,8 +35,6 @@ public class Letter : MonoBehaviour
     public GameObject scoreAddedImage;
     public GameObject bombBonusPrefab;
     public GameObject electricBonusPrefab;
-    public float dayNightReference;
-    private Light2D lightInstance;
     public bool isVowel;
 
     public void Setup(LetterData data)
@@ -71,7 +69,15 @@ public class Letter : MonoBehaviour
     private void Start()
     {
         pauseScript = GameObject.FindGameObjectWithTag("PauseButton").GetComponent<Pause>();
-        _rigidbody2D.velocity = new Vector2(0, letterSpawnScript.currentLetterMovementSpeed);
+        if (TutorialManager.Instance == null || TutorialManager.Instance.isTutorialActive == false)
+        {
+            //Debug.Log("Setting initial velocity for letter." + "tutman istut active" + (TutorialManager.Instance.isTutorialActive));
+            _rigidbody2D.velocity = new Vector2(0, letterSpawnScript.currentLetterMovementSpeed);
+        }
+        else
+        {
+            Debug.Log("TutorialManager is active, not setting initial velocity.");
+        }
         Instantiate(selectedEffectPrefab, transform.position, Quaternion.identity, transform);
         animator = GetComponent<Animator>();
         if (animator == null)
@@ -99,21 +105,13 @@ public class Letter : MonoBehaviour
     IEnumerator TurnOffLights()
     {
         yield return new WaitForEndOfFrame();
-        if (GameManager.Instance != null)
+        LightController lightController = FindObjectOfType<LightController>();
+        GameObject lightTest = transform.Find("light test").gameObject;
+        if (lightController.dayNightReference <= 0.35f)
         {
-            float progress = (float)GameManager.Instance.levelPercentage;
-            float chunkProgress = (progress % 0.20f) / 0.20f;
-            dayNightReference = chunkProgress;
-            if (dayNightReference == 0.0f)
-            {
-                dayNightReference = 1.0f;
-            }
-            GameObject lightTest = transform.Find("light test").gameObject;
-            if (dayNightReference <= 0.35f)
-            {
-                lightTest.SetActive(false);
-            }
+            lightTest.SetActive(false);
         }
+
     }
     public void TriggerElectricEffect()
     {
@@ -221,39 +219,46 @@ public class Letter : MonoBehaviour
     }
     private void TouchUpdate()
     {
-        if (Time.timeScale == 0f)
-            return;
+        if (Time.timeScale == 0f) return;
+        // After confirming this tap hit a letter tile
 
-    #if UNITY_EDITOR
-            if (Input.GetMouseButtonDown(0))
-            {
-                HandleTouchInput(Input.mousePosition);
-                return;
-            }
+
+
+    #if UNITY_IOS || UNITY_ANDROID
+        // Mobile: use touch
+        if (Input.touchCount > 0)
+        {
+            var t = Input.GetTouch(0);
+            if (t.phase == TouchPhase.Began)
+                HandleTouchInput(t.position);
+        }
     #else
-            if (Input.touchCount > 0)
-            {
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Began)
-                {
-                    HandleTouchInput(touch.position);
-                }
-            }
+        // Editor + Standalone (macOS/Windows/Linux): use mouse
+        if (Input.GetMouseButtonDown(0))
+            HandleTouchInput(Input.mousePosition);
     #endif
     }
     private void HandleTouchInput(Vector2 screenPosition)
     {
-        Camera camera = Camera.main;
-        if (camera == null) return;
+        var cam = Camera.main;
+        if (!cam) return;
 
-        Vector3 worldPosition = camera.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, camera.nearClipPlane));
+        // Convert screen -> world (for 2D, z can be 0)
+        Vector3 world = cam.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, 0f));
+        Vector2 p2D = new Vector2(world.x, world.y);
 
-        RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero);
+        // Hit test a Collider2D at that point
+        var hit = Physics2D.OverlapPoint(p2D);
+        if (hit == null) return;
 
-        if (hit.collider != null && hit.collider.gameObject == gameObject)
+        // If this script is on the letter object you care about:
+        if (hit.transform == transform)  // or: if (hit.GetComponentInParent<Letter>() == GetComponent<Letter>())
         {
-            GameObject hitObject = hit.collider.gameObject;
-            LetterSelected(hitObject);
+            // your existing selection logic
+            LetterSelected(hit.gameObject);
+
+            // tell the tutorial manager this specific world object was tapped
+            TutorialManager.Instance?.NotifyWorldTap(hit.transform);
         }
     }
     void SelectedeffectActivator()
@@ -281,7 +286,7 @@ public class Letter : MonoBehaviour
         {
             if (!selected)
             {
-                AudioManager.Instance.PlaySFX(SFXType.letterSelect, 1f);
+                
                 CreateLetterFlash();
             }
             else

@@ -78,7 +78,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -123293463
-  m_SortingLayer: 7
+  m_SortingLayer: 6
   m_SortingOrder: 1
   m_Sprite: {fileID: 270387367, guid: b73e6cc5cc999439d82df413eced04a6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -137,10 +137,6 @@ MonoBehaviour:
   rayDistance: 0.01
   rayCastOffsetSoItDoesntHitItself: 0.41
   isInterrupted: 0
-  clickParticles: {fileID: 0}
-  submitParticlesObject: {fileID: 8672613932126264296, guid: 485e00555c7df4dd4aebfacb1246ed1f, type: 3}
-  outlineObject: {fileID: 1031386686399594519, guid: ea8a29181108a434da2674d1bca51567, type: 3}
-  flashDuration: 0.3
   selected: 0
   selectedEffect: {fileID: 0}
   selectedEffectPrefab: {fileID: 7502856543031428952, guid: 280c740adf11848d3878e266fdbbf280, type: 3}
@@ -151,7 +147,6 @@ MonoBehaviour:
   isElectric: 0
   letterIsBomb: 0
   BombPrefab: {fileID: 5452341686290999062, guid: ad696f686be28450b97f5351bc755f24, type: 3}
-  bombParticleEffects: {fileID: 7703787091275761631, guid: c1ab984b4022f4d5b9ccd8655168391a, type: 3}
   animator: {fileID: 0}
   bombDelay: 0.15
   pauseScript: {fileID: 0}
@@ -296,7 +291,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5459143594522224428}
   - component: {fileID: 378757322596444839}
-  - component: {fileID: 1923699861481732928}
   m_Layer: 0
   m_Name: light test
   m_TagString: Untagged
@@ -375,16 +369,3 @@ MonoBehaviour:
   - {x: -0.04435325, y: 0.43408334, z: 0.000000044703484}
   - {x: -0.40457326, y: 0.40882826, z: 0}
   - {x: -0.42913187, y: -0.07185578, z: 0.000000044703484}
---- !u!114 &1923699861481732928
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9056507536478089602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8d0a67fbf32142729711a8d55b4ec9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dayNightReference: 0

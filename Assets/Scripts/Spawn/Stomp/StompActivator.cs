@@ -10,6 +10,7 @@ public class StompActivator : MonoBehaviour
     public GameObject currentBorders;
     public GameObject spawnPoint;
     public GameObject endScenario;
+    public bool bossLevel = false;
     //if level = 10 activate stomp guy and deactivate borders
 
     void Awake()
@@ -22,23 +23,20 @@ public class StompActivator : MonoBehaviour
     }
     IEnumerator StompActivatorMethod()
     {
-        yield return new WaitForEndOfFrame(); // Ensure the game is fully initialized before checking level percentage
-        if (GameManager.Instance.levelPercentage == 0.2f || GameManager.Instance.levelPercentage == 0.4f || GameManager.Instance.levelPercentage == 0.6f || GameManager.Instance.levelPercentage == 0.8f || GameManager.Instance.levelPercentage == 1.0f)
+        yield return new WaitForEndOfFrame(); // Ensure the game is fully initialized before checking level percentage\
+        LightController lightController = FindObjectOfType<LightController>();
+        if (GameManager.Instance.GMLevel == 20 || GameManager.Instance.GMLevel == 40 || GameManager.Instance.GMLevel == 60 || GameManager.Instance.GMLevel == 80 || GameManager.Instance.GMLevel == 100 || GameManager.Instance.GMLevel == 120|| GameManager.Instance.GMLevel == 140|| GameManager.Instance.GMLevel == 160|| GameManager.Instance.GMLevel == 180|| GameManager.Instance.GMLevel == 200)
         {
-            AudioManager.Instance.PlaySFX(SFXType.bossAppears, 1f); 
-            Debug.Log("Activating stomp guy and deactivating borders for level: " + GameManager.Instance.levelPercentage);
+            bossLevel = true;
+            AudioManager.Instance.PlaySFX(SFXType.bossAppears, 1f);
             Time.timeScale = 0f; // Pause the game
             spawnPoint.transform.position = new Vector2(0, 3.77f);
             endScenario.transform.position = new Vector2(0, -1.61f);
-            Debug.Log("Starting stomp activation coroutine.");
             yield return StartCoroutine(FadeToBlack());
-            Debug.Log("Fading to black for stomp activation.");
             stompGuyAndBorders.SetActive(true);
             currentBorders.SetActive(false);
             yield return StartCoroutine(FadeFromBlack());
-            Debug.Log("Fading from black for stomp activation.");
             Time.timeScale = 1f; // Resume the game
-            Debug.Log("UNPAUSE.");
         }
 
     }

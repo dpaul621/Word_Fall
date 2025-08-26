@@ -33,7 +33,7 @@ public class ElectricEffect : MonoBehaviour
     }
     public void ElectricSound()
     {
-        AudioManager.Instance.PlaySFX(SFXType.electricExplosion, 1f);
+        AudioManager.Instance.PlaySFX(SFXType.electricExplosion, 0.15f);
     }
 
     public void TurnOffParentSpriteRenderer()
